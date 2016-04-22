@@ -1,6 +1,6 @@
 package main;
 
-import main.counter.CrossoverCounter;
+import main.counter.OverlapCounter;
 import main.counter.DirectNeighborCounter;
 import main.counter.NeighborCounter;
 import main.node.Node;
@@ -12,16 +12,16 @@ import java.util.List;
  */
 public class FoldingAnalyzer {
 
-    private List<Node>[][] nodes;
+    private List<Node>[][] nodes; //x, y, z (z for crossing)
 
-    private Integer crossoverCount;
+    private Integer overlapCount;
     private Integer neighborCount;
     private Integer directNeighborCount;
 
     public FoldingAnalyzer(List<Node>[][] nodes) {
         this.nodes = nodes;
 
-        crossoverCount = 0;
+        overlapCount = 0;
         neighborCount = 0;
         directNeighborCount = 0;
     }
@@ -29,21 +29,21 @@ public class FoldingAnalyzer {
     public int calculateTotalFitness(Node startNode) {
         analyzeFolding(startNode);
 
-        int totalFitness = neighborCount - crossoverCount - directNeighborCount;
+        int totalFitness = neighborCount - overlapCount - directNeighborCount;
 
         return totalFitness;
     }
 
     private FoldingAnalyzer analyzeFolding(Node startNode) {
-        crossoverCount = countCrossovers();
+        overlapCount = countOverlaps();
         neighborCount = countNeighbors(startNode);
         directNeighborCount = countDirectNeighbors(startNode);
 
         return this;
     }
 
-    public int countCrossovers() {
-        return new CrossoverCounter().countCrossovers(nodes);
+    public int countOverlaps() {
+        return new OverlapCounter().countOverlaps(nodes);
     }
 
     public int countNeighbors(Node startNode) {

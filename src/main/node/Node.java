@@ -1,5 +1,7 @@
 package main.node;
 
+import main.node.Direction.Direction;
+
 /**
  * Created by marcus on 19.04.16.
  */
@@ -13,14 +15,43 @@ public class Node {
 
     private Position position;
 
-    public Node() {
+    private Direction validDirection;
 
+//    public Node() {
+//
+//    }
+
+    //Startnode constructor
+    public Node(int id, Position startPosition) {
+        this.id = id;
+        this.previous = null;
+        this.position = startPosition;
+        this.validDirection = validDirection;
     }
 
-    public Node(int id, Node previous, Position position) {
+    //following nodes
+    public Node(int id, Node previous, Direction validDirection) {
         this.id = id;
         this.previous = previous;
-        this.position = position;
+        this.position = new Position(0, 0, 0);
+        this.validDirection = validDirection;
+
+        setupNode();
+        previous.setNext(this);
+    }
+
+    private void setupNode() {
+        if (previous != null) {
+            Position previousPosition = previous.getPosition();
+            setCurrentPosition(previousPosition, validDirection);
+        }
+    }
+
+    private void setCurrentPosition(Position previousPosition, Direction direction) {
+        position.setX(previousPosition.getX() + direction.xDirection);
+        position.setY(previousPosition.getY() + direction.yDirection);
+
+        position.setZ(0);
     }
 
     public int getId() {
@@ -61,5 +92,13 @@ public class Node {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public Direction getValidDirection() {
+        return validDirection;
+    }
+
+    public void setValidDirection(Direction validDirection) {
+        this.validDirection = validDirection;
     }
 }

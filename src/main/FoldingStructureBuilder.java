@@ -8,10 +8,10 @@ import java.util.List;
 /**
  * Created by marcus on 19.04.16.
  */
-public class FoldingStructureCreator {
+public class FoldingStructureBuilder {
 
     public static List<Node>[][] buildStructureAndStartNode(String primarySequence, Node startNode){
-        List[][] nodes = new ArrayList[0][0];
+        List<Node>[][] nodes = new ArrayList[0][];
 
         return nodes;
     }
