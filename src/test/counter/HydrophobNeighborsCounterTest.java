@@ -68,9 +68,9 @@ public class HydrophobNeighborsCounterTest {
     }
 
     private void testDirectNeighbors(char status_1, char status_2, Direction direction, int expectedNeighbors) {
-        List<Node>[][] nodes = new ArrayList[4][4];
+        List<Node>[][] nodes = new ArrayList[5][5];
 
-        Node startNode = new Node(0, new Position(1, 1, 0));
+        Node startNode = new Node(0, new Position(2, 2, 0));
         Node nextNode = new Node(1, startNode, direction);
 
         startNode.setHydrophob(status_1);
@@ -79,8 +79,8 @@ public class HydrophobNeighborsCounterTest {
         startNodeList.add(startNode);
         nextNodeList_1.add(nextNode);
 
-        nodes[1][1] = startNodeList;
-        nodes[2][1] = nextNodeList_1;
+        nodes[2][2] = startNodeList;
+        nodes[nextNode.getPosition().getX()][nextNode.getPosition().getY()] = nextNodeList_1;
 
         int hydrophobNeighborsCount = new HydrophobNeighborsCounter(nodes).countHydrophobNeighbors(startNode);
 
