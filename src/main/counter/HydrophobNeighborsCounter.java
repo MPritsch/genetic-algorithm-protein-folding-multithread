@@ -14,9 +14,6 @@ public class HydrophobNeighborsCounter {
     private int currentX;
     private int currentY;
 
-    private int neighborX;
-    private int neighborY;
-
     private List<Node>[][] nodes;
 
     public HydrophobNeighborsCounter(List<Node>[][] nodes) {
@@ -28,9 +25,7 @@ public class HydrophobNeighborsCounter {
         Node currentNode = startNode;
 
         do {
-            currentX = currentNode.getPosition().getX();
-            currentY = currentNode.getPosition().getY();
-
+            setupCurrentPosition(currentNode);
             countNeighborsForCurrentPosition(currentNode);
 
             currentNode = currentNode.getNext();
@@ -39,38 +34,49 @@ public class HydrophobNeighborsCounter {
         return hydrophobNeighborCount;
     }
 
+    private void setupCurrentPosition(Node currentNode) {
+        currentX = currentNode.getPosition().getX();
+        currentY = currentNode.getPosition().getY();
+    }
+
     private void countNeighborsForCurrentPosition(Node currentNode) {
         countHorizontalNeighbors(currentNode);
         countVerticalNeighbors(currentNode);
     }
 
     private void countHorizontalNeighbors(Node currentNode) {
-        neighborX = currentX + 1;
-        neighborY = currentY;
+        int neighborX = currentX + 1;
+        int neighborY = currentY;
 
-        countNeighborsOnNeighborPosition(currentNode);
+        countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
 
         neighborX = currentX - 1;
-        countNeighborsOnNeighborPosition(currentNode);
+        countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
     }
 
     private void countVerticalNeighbors(Node currentNode) {
-        neighborX = currentX;
-        neighborY = currentY - 1;
-        countNeighborsOnNeighborPosition(currentNode);
+        int neighborX = currentX;
+        int neighborY = currentY - 1;
+        countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
 
         neighborY = currentY + 1;
-        countNeighborsOnNeighborPosition(currentNode);
+        countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
     }
 
-    private void countNeighborsOnNeighborPosition(Node currentNode) {
-        List<Node> neighborNodes = nodes[neighborX][neighborY];
+    private void countNeighborsOnNeighborPosition(Node currentNode, List<Node> neighborNodes) {
+        if (neighborNodesExist(neighborNodes)) {
+            increaseCountForHydrophobNeighbors(currentNode, neighborNodes);
+        }
+    }
 
-        if (neighborNodes != null && !neighborNodes.isEmpty()) {
-            for (Node neighborNode : neighborNodes) {
-                if (areValidHydrophobNeighbors(currentNode, neighborNode)) {
-                    hydrophobNeighborCount++;
-                }
+    private boolean neighborNodesExist(List<Node> neighborNodes) {
+        return neighborNodes != null && !neighborNodes.isEmpty();
+    }
+
+    private void increaseCountForHydrophobNeighbors(Node currentNode, List<Node> neighborNodes) {
+        for (Node neighborNode : neighborNodes) {
+            if (areValidHydrophobNeighbors(currentNode, neighborNode)) {
+                hydrophobNeighborCount++;
             }
         }
     }

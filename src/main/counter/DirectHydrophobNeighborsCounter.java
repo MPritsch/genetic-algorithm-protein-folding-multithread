@@ -13,16 +13,22 @@ public class DirectHydrophobNeighborsCounter {
 
         do {
             Node directNeighborNode = currentNode.getNext();
-            if (isNodeHydrophob(currentNode) && isNodeHydrophob(directNeighborNode)) {
+
+            if (areHydrophobNeighbors(currentNode, directNeighborNode)) {
                 directNeighborCount++;
             }
+
             currentNode = currentNode.getNext();
         } while (currentNode != null);
 
         return directNeighborCount;
     }
 
-    private static boolean isNodeHydrophob(Node node) {
+    private static boolean areHydrophobNeighbors(Node currentNode, Node directNeighborNode) {
+        return isHydrophobNode(currentNode) && isHydrophobNode(directNeighborNode);
+    }
+
+    private static boolean isHydrophobNode(Node node) {
         return node != null
                 && node.isHydrophob();
     }

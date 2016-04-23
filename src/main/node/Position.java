@@ -38,4 +38,17 @@ public class Position {
     public void setZ(int z) {
         this.z = z;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Position position = (Position) o;
+
+        if (x != position.x) return false;
+        if (y != position.y) return false;
+        return z == position.z;
+
+    }
 }

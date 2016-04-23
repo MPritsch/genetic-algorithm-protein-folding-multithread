@@ -16,7 +16,7 @@ public class FitnessCalculator {
     }
 
     public int calculateFitness(Node startNode) {
-        List<Node>[][] nodes = new FoldingStructureBuilder().buildStructureAndStartNode(primarySequence, startNode);
+        List<Node>[][] nodes = new FoldingStructureBuilder().buildStructure(primarySequence, startNode);
 
         int fitness = new FoldingAnalyzer(nodes)
                 .calculateTotalFitness(startNode);
