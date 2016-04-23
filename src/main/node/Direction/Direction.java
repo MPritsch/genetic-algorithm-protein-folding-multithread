@@ -3,8 +3,8 @@ package main.node.Direction;
 /**
  * Created by marcus on 22.04.16.
  */
-public interface Direction {
+public class Direction {
 
-    int xDirection = 0;
-    int yDirection = 0;
+    public short xDirection = 0;
+    public short yDirection = 0;
 }

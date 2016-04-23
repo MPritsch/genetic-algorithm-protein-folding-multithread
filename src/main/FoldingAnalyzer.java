@@ -1,8 +1,8 @@
 package main;
 
 import main.counter.OverlapCounter;
-import main.counter.DirectNeighborCounter;
-import main.counter.NeighborCounter;
+import main.counter.DirectHydrophobNeighborsCounter;
+import main.counter.HydrophobNeighborsCounter;
 import main.node.Node;
 
 import java.util.List;
@@ -47,11 +47,11 @@ public class FoldingAnalyzer {
     }
 
     public int countNeighbors(Node startNode) {
-        return new NeighborCounter().countNeighbors();
+        return new HydrophobNeighborsCounter(nodes).countHydrophobNeighbors(startNode);
     }
 
     public int countDirectNeighbors(Node startNode) {
-        return new DirectNeighborCounter().countDirectNeighbors(startNode);
+        return new DirectHydrophobNeighborsCounter().countDirectNeighbors(startNode);
     }
 
 //    public int getTotalEnergy(Position startPosition, Node[][] nodes) {

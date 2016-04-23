@@ -3,8 +3,10 @@ package main.node.Direction;
 /**
  * Created by marcus on 22.04.16.
  */
-public class Down implements Direction {
+public class Down extends Direction {
 
-    int xDirection = 0;
-    int yDirection = -1;
+    public Down() {
+        xDirection = 0;
+        yDirection = -1;
+    }
 }

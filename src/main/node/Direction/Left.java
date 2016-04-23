@@ -3,8 +3,10 @@ package main.node.Direction;
 /**
  * Created by marcus on 22.04.16.
  */
-public class Left implements Direction {
+public class Left extends Direction {
 
-    int xDirection = -1;
-    int yDirection = 0;
+    public Left() {
+        xDirection = -1;
+        yDirection = 0;
+    }
 }

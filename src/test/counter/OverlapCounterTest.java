@@ -1,4 +1,4 @@
-package test;
+package test.counter;
 
 import main.counter.OverlapCounter;
 import main.node.Direction.Up;

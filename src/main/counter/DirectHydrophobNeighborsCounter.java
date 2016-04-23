@@ -5,7 +5,7 @@ import main.node.Node;
 /**
  * Created by marcus on 19.04.16.
  */
-public class DirectNeighborCounter {
+public class DirectHydrophobNeighborsCounter {
 
     public static int countDirectNeighbors(Node startNode) {
         int directNeighborCount = 0;

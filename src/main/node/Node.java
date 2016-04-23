@@ -17,41 +17,29 @@ public class Node {
 
     private Direction validDirection;
 
-//    public Node() {
-//
-//    }
-
     //Startnode constructor
     public Node(int id, Position startPosition) {
         this.id = id;
         this.previous = null;
         this.position = startPosition;
-        this.validDirection = validDirection;
     }
 
     //following nodes
     public Node(int id, Node previous, Direction validDirection) {
         this.id = id;
         this.previous = previous;
-        this.position = new Position(0, 0, 0);
         this.validDirection = validDirection;
 
-        setupNode();
+        setCurrentPosition(previous.getPosition(), validDirection);
+
         previous.setNext(this);
     }
 
-    private void setupNode() {
-        if (previous != null) {
-            Position previousPosition = previous.getPosition();
-            setCurrentPosition(previousPosition, validDirection);
-        }
-    }
-
     private void setCurrentPosition(Position previousPosition, Direction direction) {
-        position.setX(previousPosition.getX() + direction.xDirection);
-        position.setY(previousPosition.getY() + direction.yDirection);
+        int xPosition = previousPosition.getX() + direction.xDirection;
+        int yPosition = previousPosition.getY() + direction.yDirection;
 
-        position.setZ(0);
+        position = new Position(xPosition, yPosition, 0);
     }
 
     public int getId() {
