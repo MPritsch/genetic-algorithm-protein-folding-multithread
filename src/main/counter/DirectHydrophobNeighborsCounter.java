@@ -8,6 +8,10 @@ import main.node.Node;
 public class DirectHydrophobNeighborsCounter {
 
     public static int countDirectNeighbors(Node startNode) {
+        if (startNode == null) {
+            return 0;
+        }
+
         int directNeighborCount = 0;
         Node currentNode = startNode;
 
