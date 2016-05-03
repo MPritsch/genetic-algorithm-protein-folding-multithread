@@ -1,5 +1,6 @@
 package main;
 
+import main.direction.relative.RelativeDirection;
 import main.node.Node;
 
 import java.util.List;
@@ -15,11 +16,11 @@ public class FitnessCalculator {
         this.primarySequence = primarySequence;
     }
 
-    public int calculateFitness(Node startNode) {
-        List<Node>[][] nodes = new FoldingStructureBuilder().buildStructure(primarySequence, startNode);
+    public int calculateFitness(List<RelativeDirection> relativeDirections) {
+        Node[][] nodes = new FoldingStructureBuilder().buildStructure(primarySequence, relativeDirections);
 
         int fitness = new FoldingAnalyzer(nodes)
-                .calculateTotalFitness(startNode);
+                .calculateTotalFitness();
 
         return fitness;
     }

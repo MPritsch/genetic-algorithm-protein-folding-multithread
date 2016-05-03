@@ -1,8 +1,10 @@
 package main;
 
+import main.direction.relative.RelativeDirection;
 import main.node.Node;
+import main.node.NodeBuilder;
+import main.node.Structure;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,57 +12,75 @@ import java.util.List;
  */
 public class FoldingStructureBuilder {
 
-    public static List<Node>[][] buildStructure(String primarySequence, Node startNode) {
-        if(isEmptySequenceOrStartNode(primarySequence, startNode)){
-            return new ArrayList[0][0];
+    private String primarySequence;
+    private List<RelativeDirection> relativeDirections;
+    private Node[][] nodeStructure;
+
+    private Structure structure;
+
+    public FoldingStructureBuilder(String primarySequence, List<RelativeDirection> relativeDirections) {
+        this.structure = new Structure();
+        structure.setRelativeDirections(relativeDirections);
+
+        this.relativeDirections = relativeDirections;
+        this.primarySequence = primarySequence;
+        this.nodeStructure = setupNodeArrays();
+    }
+
+    private Node[][] setupNodeArrays() {
+        int arrayLength = primarySequence.length() + 1;
+        return new Node[arrayLength][arrayLength];
+    }
+
+    public Structure buildStructure() {
+        if(isEmptySequenceOrHasEmptyDirections()){
+            structure.setValid(false);
         }
 
-        return buildNodeStructure(primarySequence, startNode);
+        return buildNodeStructure();
     }
 
-    private static boolean isEmptySequenceOrStartNode(String primarySequence, Node startNode) {
-        return primarySequence == null || primarySequence.length() == 0 || startNode == null;
+    private boolean isEmptySequenceOrHasEmptyDirections() {
+        return primarySequence == null || primarySequence.length() == 0 || relativeDirections == null || relativeDirections.size() == 0;
     }
 
-    private static List<Node>[][] buildNodeStructure(String primarySequence, Node startNode) {
-        List<Node>[][] nodeStructure = setupNodeArrays(primarySequence);
+    private Structure buildNodeStructure() {
+        Node startNode = new NodeBuilder().createStartNode(relativeDirections.get(0));
 
         Node currentNode = startNode;
 
         for (int charPosition = 0; charPosition < primarySequence.length(); charPosition++) {
-            setHydrophobStatus(primarySequence, currentNode, charPosition);
-            addNodeToStructure(nodeStructure, currentNode);
+            setHydrophobStatus(currentNode, charPosition);
+            if(!couldAddNodeToStructure(currentNode, relativeDirections.get(charPosition))){
+                return structure; //abbruch
+            }
 
             currentNode = currentNode.getNext();
         }
 
-        return nodeStructure;
+        structure.setNodes(nodeStructure);
+
+        return structure;
     }
 
-    private static List<Node>[][] setupNodeArrays(String primarySequence) {
-        int arrayLength = primarySequence.length() * 2 + 1;
-        return new ArrayList[arrayLength][arrayLength];
-    }
-
-    private static void setHydrophobStatus(String primarySequence, Node currentNode, int charPosition) {
+    private void setHydrophobStatus(Node currentNode, int charPosition) {
         char hydrophobStatus = primarySequence.charAt(charPosition);
 
         currentNode.setHydrophob(hydrophobStatus);
     }
 
-    private static void addNodeToStructure(List<Node>[][] nodeStructure, Node currentNode) {
-        int currentX = currentNode.getPosition().getX();
-        int currentY = currentNode.getPosition().getY();
+    private boolean couldAddNodeToStructure(Node currentNode, RelativeDirection directionForNextNode) {
+        Node followingNode = new NodeBuilder().createFollowingNode(currentNode, directionForNextNode);
 
-        List<Node> nodeList = nodeStructure[currentX][currentY];
-        if (nodeList == null) {
-            nodeList = new ArrayList<>();
-            currentNode.getPosition().setZ(0);
+        int x = followingNode.getPosition().getX();
+        int y = followingNode.getPosition().getY();
+
+        if(nodeStructure[x][y] == null){
+            nodeStructure[x][y] = followingNode;
+            return true;
         }
 
-        nodeList.add(currentNode);
-        currentNode.getPosition().setZ(nodeList.size() - 1);
-
-        nodeStructure[currentX][currentY] = nodeList;
+        structure.setOverlapping(true);
+        return false;
     }
 }

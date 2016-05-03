@@ -7,12 +7,10 @@ public class Position {
 
     private int x;
     private int y;
-    private int z;
 
-    public Position(int x, int y, int z) {
+    public Position(int x, int y) {
         this.x = x;
         this.y = y;
-        this.z = z;
     }
 
     public int getY() {
@@ -31,14 +29,6 @@ public class Position {
         this.x = x;
     }
 
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -47,8 +37,6 @@ public class Position {
         Position position = (Position) o;
 
         if (x != position.x) return false;
-        if (y != position.y) return false;
-        return z == position.z;
-
+        return y == position.y;
     }
 }

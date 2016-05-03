@@ -1,10 +1,15 @@
 package main.node;
 
-import main.node.Direction.Direction;
+import lombok.Getter;
+import lombok.Setter;
+import main.direction.absolute.*;
+import main.direction.relative.RelativeDirection;
 
 /**
  * Created by marcus on 19.04.16.
  */
+@Getter
+@Setter
 public class Node {
 
     private int id;
@@ -15,78 +20,29 @@ public class Node {
 
     private Position position;
 
-    private Direction validDirection;
+    private RelativeDirection directionForNextNode;
+    private AbsoluteDirectionEnum moveDoneInDirection;
 
     //Startnode constructor
-    public Node(int id, Position startPosition) {
-        this.id = id;
+    public Node(Position startPosition, RelativeDirection directionForNextNode) {
+        this.id = 0;
         this.previous = null;
         this.position = startPosition;
+        this.directionForNextNode = directionForNextNode;
+        this.moveDoneInDirection = AbsoluteDirectionEnum.EAST; //go any direction... right first
     }
 
     //following nodes
-    public Node(int id, Node previous, Direction validDirection) {
-        this.id = id;
+    public Node(Node previous, RelativeDirection directionForNextNode) {
         this.previous = previous;
-        this.validDirection = validDirection;
+        this.id = previous.getId();
+        this.directionForNextNode = directionForNextNode;
+        this.position = new Position(previous.getPosition().getX(), previous.getPosition().getY());
 
-        setCurrentPosition(previous.getPosition(), validDirection);
-
-        previous.setNext(this);
-    }
-
-    private void setCurrentPosition(Position previousPosition, Direction direction) {
-        int xPosition = previousPosition.getX() + direction.xDirection;
-        int yPosition = previousPosition.getY() + direction.yDirection;
-
-        position = new Position(xPosition, yPosition, 0);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Node getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(Node previous) {
-        this.previous = previous;
-    }
-
-    public Node getNext() {
-        return next;
-    }
-
-    public void setNext(Node next) {
-        this.next = next;
-    }
-
-    public boolean isHydrophob() {
-        return hydrophob;
+        this.previous.setNext(this);
     }
 
     public void setHydrophob(Character status) {
         this.hydrophob = (status.equals('1')) ? true : false;
-    }
-
-    public Position getPosition() {
-        return position;
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
-    }
-
-    public Direction getValidDirection() {
-        return validDirection;
-    }
-
-    public void setValidDirection(Direction validDirection) {
-        this.validDirection = validDirection;
     }
 }

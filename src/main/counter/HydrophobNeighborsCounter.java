@@ -14,9 +14,9 @@ public class HydrophobNeighborsCounter {
     private int currentX;
     private int currentY;
 
-    private List<Node>[][] nodes;
+    private Node[][] nodes;
 
-    public HydrophobNeighborsCounter(List<Node>[][] nodes) {
+    public HydrophobNeighborsCounter(Node[][] nodes) {
         this.nodes = nodes;
     }
 
@@ -63,22 +63,20 @@ public class HydrophobNeighborsCounter {
         countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
     }
 
-    private void countNeighborsOnNeighborPosition(Node currentNode, List<Node> neighborNodes) {
+    private void countNeighborsOnNeighborPosition(Node currentNode, Node neighborNodes) {
         if (neighborNodesExist(neighborNodes)) {
             increaseCountForHydrophobNeighbors(currentNode, neighborNodes);
         }
     }
 
-    private boolean neighborNodesExist(List<Node> neighborNodes) {
-        return neighborNodes != null && !neighborNodes.isEmpty();
+    private boolean neighborNodesExist(Node neighborNode) {
+        return neighborNode != null;
     }
 
-    private void increaseCountForHydrophobNeighbors(Node currentNode, List<Node> neighborNodes) {
-        for (Node neighborNode : neighborNodes) {
+    private void increaseCountForHydrophobNeighbors(Node currentNode, Node neighborNode) {
             if (areValidHydrophobNeighbors(currentNode, neighborNode)) {
                 hydrophobNeighborCount++;
             }
-        }
     }
 
     private boolean areValidHydrophobNeighbors(Node currentNode, Node neighborNode) {

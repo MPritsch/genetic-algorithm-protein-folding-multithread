@@ -1,6 +1,5 @@
 package main;
 
-import main.counter.OverlapCounter;
 import main.counter.DirectHydrophobNeighborsCounter;
 import main.counter.HydrophobNeighborsCounter;
 import main.node.Node;
@@ -12,16 +11,15 @@ import java.util.List;
  */
 public class FoldingAnalyzer {
 
-    private List<Node>[][] nodes; //x, y, z (z for crossing)
+    private Node[][] nodes; //x, y, z (z for crossing)
 
     private Integer overlapCount;
     private Integer neighborCount;
     private Integer directNeighborCount;
 
-    public FoldingAnalyzer(List<Node>[][] nodes) {
+    public FoldingAnalyzer(Node[][] nodes) {
         this.nodes = nodes;
 
-        overlapCount = 0;
         neighborCount = 0;
         directNeighborCount = 0;
     }
@@ -29,21 +27,16 @@ public class FoldingAnalyzer {
     public int calculateTotalFitness(Node startNode) {
         analyzeFolding(startNode);
 
-        int totalFitness = neighborCount - overlapCount - directNeighborCount;
+        int totalFitness = neighborCount - directNeighborCount;
 
         return totalFitness;
     }
 
     private FoldingAnalyzer analyzeFolding(Node startNode) {
-        overlapCount = countOverlaps();
         neighborCount = countNeighbors(startNode);
         directNeighborCount = countDirectNeighbors(startNode);
 
         return this;
-    }
-
-    public int countOverlaps() {
-        return new OverlapCounter().countOverlaps(nodes);
     }
 
     public int countNeighbors(Node startNode) {
