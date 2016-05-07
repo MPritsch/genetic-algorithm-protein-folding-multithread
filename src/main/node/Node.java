@@ -2,8 +2,6 @@ package main.node;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.direction.absolute.*;
-import main.direction.relative.RelativeDirection;
 
 /**
  * Created by marcus on 19.04.16.
@@ -20,24 +18,18 @@ public class Node {
 
     private Position position;
 
-    private RelativeDirection directionForNextNode;
-    private AbsoluteDirectionEnum moveDoneInDirection;
-
     //Startnode constructor
-    public Node(Position startPosition, RelativeDirection directionForNextNode) {
+    public Node(Position startPosition) {
         this.id = 0;
         this.previous = null;
         this.position = startPosition;
-        this.directionForNextNode = directionForNextNode;
-        this.moveDoneInDirection = AbsoluteDirectionEnum.EAST; //go any direction... right first
     }
 
     //following nodes
-    public Node(Node previous, RelativeDirection directionForNextNode) {
+    public Node(Node previous, Position position) {
         this.previous = previous;
-        this.id = previous.getId();
-        this.directionForNextNode = directionForNextNode;
-        this.position = new Position(previous.getPosition().getX(), previous.getPosition().getY());
+        this.id = previous.getId() + 1;
+        this.position = position;
 
         this.previous.setNext(this);
     }

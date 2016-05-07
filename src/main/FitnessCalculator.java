@@ -2,6 +2,7 @@ package main;
 
 import main.direction.relative.RelativeDirection;
 import main.node.Node;
+import main.node.Structure;
 
 import java.util.List;
 
@@ -17,9 +18,9 @@ public class FitnessCalculator {
     }
 
     public int calculateFitness(List<RelativeDirection> relativeDirections) {
-        Node[][] nodes = new FoldingStructureBuilder().buildStructure(primarySequence, relativeDirections);
+        Structure structure = new FoldingStructureBuilder(primarySequence).buildStructure(relativeDirections);
 
-        int fitness = new FoldingAnalyzer(nodes)
+        int fitness = new FoldingAnalyzer(structure)
                 .calculateTotalFitness();
 
         return fitness;
