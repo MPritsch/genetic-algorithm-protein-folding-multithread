@@ -19,13 +19,11 @@ public class FoldingStructureBuilder {
 
     private Structure structure;
 
+    private Node startNode;
+    private Node currentNode;
+
     public FoldingStructureBuilder(String primarySequence) {
         this.primarySequence = primarySequence;
-    }
-
-    private Node[][] setupNodeArrays() {
-        int arrayLength = primarySequence.length() + 1;
-        return new Node[arrayLength][arrayLength];
     }
 
     public Structure buildStructure(List<RelativeDirection> relativeDirections) {
@@ -47,15 +45,18 @@ public class FoldingStructureBuilder {
         this.nodeStructure = setupNodeArrays();
     }
 
+    private Node[][] setupNodeArrays() {
+        int arrayLength = primarySequence.length() + 1;
+        return new Node[arrayLength][arrayLength];
+    }
+
     private boolean hasValidInputs() {
         return primarySequence == null || primarySequence.length() == 0 || relativeDirections == null || relativeDirections.size() == 0
                 || relativeDirections.size() != primarySequence.length() - 1;
     }
 
     private Structure buildNodeStructure() {
-        Node startNode = new Node(new Position((nodeStructure.length / 2) - 1, (nodeStructure.length / 2)));
-
-        if (!couldBuildStructure(startNode)) {
+        if (!couldBuildStructure()) {
             return returnOverlappingStructure();
         }
 
@@ -76,11 +77,8 @@ public class FoldingStructureBuilder {
         }
     }
 
-    private boolean couldBuildStructure(Node startNode) {
-        Node currentNode = startNode;
-
-        Move move = new Move(currentNode.getPosition().getX(), currentNode.getPosition().getY(), nodeStructure.length);
-        nodeStructure[move.getX()][move.getY()] = currentNode;
+    private boolean couldBuildStructure() {
+        Move move = setupStartNodeAndPrepareMoving();
 
         for (int i = 0; i < primarySequence.length() - 1; i++) {
             switch (relativeDirections.get(i)) {
@@ -95,7 +93,7 @@ public class FoldingStructureBuilder {
                     break;
             }
 
-            if (nodeStructure[move.getX()][move.getY()] != null) {
+            if (isOverlapping(nodeStructure[move.getX()][move.getY()])) {
                 return false;
             }
 
@@ -103,6 +101,24 @@ public class FoldingStructureBuilder {
             nodeStructure[move.getX()][move.getY()] = currentNode;
         }
         return true;
+    }
+
+    private Move setupStartNodeAndPrepareMoving() {
+        startNode = new Node(new Position((nodeStructure.length / 2) - 1, (nodeStructure.length / 2)));
+
+        return prepareMoving();
+    }
+
+    private Move prepareMoving() {
+        Move move = new Move(startNode.getPosition().getX(), startNode.getPosition().getY(), nodeStructure.length);
+
+        nodeStructure[move.getX()][move.getY()] = startNode;
+        currentNode = startNode;
+        return move;
+    }
+
+    private boolean isOverlapping(Node node) {
+        return node != null;
     }
 
     private Structure returnOverlappingStructure() {
