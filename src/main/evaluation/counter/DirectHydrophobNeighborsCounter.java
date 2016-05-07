@@ -1,6 +1,6 @@
-package main.counter;
+package main.evaluation.counter;
 
-import main.node.Node;
+import main.evaluation.node.Node;
 
 /**
  * Created by marcus on 19.04.16.

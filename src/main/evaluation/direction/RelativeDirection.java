@@ -1,4 +1,4 @@
-package main.direction;
+package main.evaluation.direction;
 
 /**
  * Created by marcus on 02.05.16.

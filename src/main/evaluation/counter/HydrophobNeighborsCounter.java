@@ -1,8 +1,7 @@
-package main.counter;
+package main.evaluation.counter;
 
-import main.node.Node;
-
-import java.util.List;
+import main.Torus;
+import main.evaluation.node.Node;
 
 /**
  * Created by marcus on 19.04.16.
@@ -16,8 +15,11 @@ public class HydrophobNeighborsCounter {
 
     private Node[][] nodes;
 
+    private final Torus torus;
+
     public HydrophobNeighborsCounter(Node[][] nodes) {
         this.nodes = nodes;
+        this.torus = new Torus(nodes.length);
     }
 
     public int countHydrophobNeighbors(Node startNode) {
@@ -45,21 +47,21 @@ public class HydrophobNeighborsCounter {
     }
 
     private void countHorizontalNeighbors(Node currentNode) {
-        int neighborX = currentX + 1;
-        int neighborY = currentY;
+        int neighborX = torus.convert(currentX + 1);
+        int neighborY = torus.convert(currentY);
 
         countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
 
-        neighborX = currentX - 1;
+        neighborX = torus.convert(currentX - 1);
         countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
     }
 
     private void countVerticalNeighbors(Node currentNode) {
-        int neighborX = currentX;
-        int neighborY = currentY - 1;
+        int neighborX = torus.convert(currentX);
+        int neighborY = torus.convert(currentY - 1);
         countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
 
-        neighborY = currentY + 1;
+        neighborY = torus.convert(currentY + 1);
         countNeighborsOnNeighborPosition(currentNode, nodes[neighborX][neighborY]);
     }
 
@@ -74,9 +76,9 @@ public class HydrophobNeighborsCounter {
     }
 
     private void increaseCountForHydrophobNeighbors(Node currentNode, Node neighborNode) {
-            if (areValidHydrophobNeighbors(currentNode, neighborNode)) {
-                hydrophobNeighborCount++;
-            }
+        if (areValidHydrophobNeighbors(currentNode, neighborNode)) {
+            hydrophobNeighborCount++;
+        }
     }
 
     private boolean areValidHydrophobNeighbors(Node currentNode, Node neighborNode) {

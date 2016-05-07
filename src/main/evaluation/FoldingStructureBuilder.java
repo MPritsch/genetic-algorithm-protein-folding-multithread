@@ -1,10 +1,10 @@
-package main;
+package main.evaluation;
 
-import main.direction.Move;
-import main.direction.RelativeDirection;
-import main.node.Node;
-import main.node.Position;
-import main.node.Structure;
+import main.evaluation.direction.Move;
+import main.evaluation.direction.RelativeDirection;
+import main.evaluation.node.Node;
+import main.evaluation.node.Position;
+import main.evaluation.node.Structure;
 
 import java.util.List;
 

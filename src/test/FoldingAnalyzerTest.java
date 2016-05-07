@@ -1,6 +1,6 @@
 //package test;
 //
-//import main.FoldingAnalyzer;
+//import FoldingAnalyzer;
 //import org.junit.Before;
 //import org.junit.Test;
 //

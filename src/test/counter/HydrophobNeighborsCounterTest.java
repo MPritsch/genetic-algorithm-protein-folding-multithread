@@ -1,8 +1,8 @@
 //package test.counter;
 //
-//import main.counter.HydrophobNeighborsCounter;
-//import main.node.Node;
-//import main.node.Position;
+//import HydrophobNeighborsCounter;
+//import Node;
+//import Position;
 //import org.junit.Before;
 //import org.junit.Test;
 //

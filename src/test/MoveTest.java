@@ -1,6 +1,6 @@
 package test;
 
-import main.direction.Move;
+import main.evaluation.direction.Move;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

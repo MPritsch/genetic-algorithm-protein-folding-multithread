@@ -1,7 +1,7 @@
 //package test.node;
 //
-//import main.node.Node;
-//import main.node.Position;
+//import Node;
+//import Position;
 //import org.junit.Before;
 //import org.junit.Test;
 //

@@ -1,15 +1,16 @@
 package test;
 
-import main.FoldingStructureBuilder;
-import main.node.Node;
-import main.node.Position;
-import main.node.Structure;
+import main.evaluation.FoldingStructureBuilder;
+import main.evaluation.direction.RelativeDirection;
+import main.evaluation.node.Node;
+import main.evaluation.node.Position;
+import main.evaluation.node.Structure;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static main.direction.RelativeDirection.*;
+import static main.evaluation.direction.RelativeDirection.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 

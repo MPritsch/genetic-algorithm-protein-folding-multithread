@@ -1,4 +1,6 @@
-package main.direction;
+package main.evaluation.direction;
+
+import main.Torus;
 
 /**
  * Created by marcus on 07.05.16.
@@ -10,7 +12,7 @@ public class Move {
     private int xLastMove;
     private int yLastMove;
 
-    private final int structureLength;
+    private final Torus torus;
 
     public Move(int x, int y, int structureLength) {
         this.x = x;
@@ -18,7 +20,7 @@ public class Move {
         xLastMove = 1; //first move in x direction
         yLastMove = 0;
 
-        this.structureLength = structureLength;
+        this.torus = new Torus(structureLength);
     }
 
     public void moveLeft() {
@@ -51,12 +53,8 @@ public class Move {
     }
 
     private void convertPositionToTorus() {
-        x = convertToTorusCoordinate(x);
-        y = convertToTorusCoordinate(y);
-    }
-
-    private int convertToTorusCoordinate(int coordinate) {
-        return (coordinate + structureLength) % structureLength;
+        x = torus.convert(x);
+        y = torus.convert(y);
     }
 
     public int getX() {
