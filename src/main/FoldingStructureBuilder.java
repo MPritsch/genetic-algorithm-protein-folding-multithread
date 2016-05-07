@@ -1,6 +1,7 @@
 package main;
 
-import main.direction.relative.RelativeDirection;
+import main.direction.Move;
+import main.direction.RelativeDirection;
 import main.node.Node;
 import main.node.Position;
 import main.node.Structure;
@@ -78,57 +79,30 @@ public class FoldingStructureBuilder {
     private boolean couldBuildStructure(Node startNode) {
         Node currentNode = startNode;
 
-        int xCurrent = currentNode.getPosition().getX();
-        int yCurrent = currentNode.getPosition().getY();
-        nodeStructure[xCurrent][yCurrent] = currentNode;
-        int xOld = xCurrent;
-        int yOld = yCurrent;
-        int xLastMove = 1;
-        int yLastMove = 0;
+        Move move = new Move(currentNode.getPosition().getX(), currentNode.getPosition().getY(), nodeStructure.length);
+        nodeStructure[move.getX()][move.getY()] = currentNode;
 
         for (int i = 0; i < primarySequence.length() - 1; i++) {
             switch (relativeDirections.get(i)) {
                 case LEFT:
-                    xOld = xCurrent;
-                    yOld = yCurrent;
-                    xCurrent = xCurrent - yLastMove;
-                    yCurrent = yCurrent + xLastMove;
-                    xLastMove = xCurrent - xOld;
-                    yLastMove = yCurrent - yOld;
+                    move.moveLeft();
                     break;
                 case RIGHT:
-                    xOld = xCurrent;
-                    yOld = yCurrent;
-                    xCurrent = xCurrent + yLastMove;
-                    yCurrent = yCurrent - xLastMove;
-                    xLastMove = xCurrent - xOld;
-                    yLastMove = yCurrent - yOld;
+                    move.moveRight();
                     break;
                 case STRAIGHT:
-                    xOld = xCurrent;
-                    yOld = yCurrent;
-                    xCurrent = xCurrent + xLastMove;
-                    yCurrent = yCurrent + yLastMove;
-                    xLastMove = xCurrent - xOld;
-                    yLastMove = yCurrent - yOld;
+                    move.moveStraight();
                     break;
             }
 
-            xCurrent = convertToTorusCoordinate(xCurrent);
-            yCurrent = convertToTorusCoordinate(yCurrent);
-
-            if (nodeStructure[xCurrent][yCurrent] != null) {
+            if (nodeStructure[move.getX()][move.getY()] != null) {
                 return false;
             }
 
-            currentNode = new Node(currentNode, new Position(xCurrent, yCurrent));
-            nodeStructure[xCurrent][yCurrent] = currentNode;
+            currentNode = new Node(currentNode, new Position(move.getX(), move.getY()));
+            nodeStructure[move.getX()][move.getY()] = currentNode;
         }
         return true;
-    }
-
-    private int convertToTorusCoordinate(int coordinate) {
-        return (coordinate + nodeStructure.length) % nodeStructure.length;
     }
 
     private Structure returnOverlappingStructure() {

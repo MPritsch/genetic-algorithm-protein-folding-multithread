@@ -2,7 +2,7 @@ package main.node;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.direction.relative.RelativeDirection;
+import main.direction.RelativeDirection;
 
 import java.util.List;
 

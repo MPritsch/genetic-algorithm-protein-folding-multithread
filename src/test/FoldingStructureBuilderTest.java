@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static main.direction.relative.RelativeDirection.*;
+import static main.direction.RelativeDirection.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
@@ -70,7 +70,6 @@ public class FoldingStructureBuilderTest {
         Node node = structure.getStartNode();
         assertNode(node, nodes, 0, new Position(2, 3), primarySequence.charAt(0));
 
-        //TODO check
         //left
         node = node.getNext();
         assertNode(node, nodes, 1, new Position(2, 4), primarySequence.charAt(1));

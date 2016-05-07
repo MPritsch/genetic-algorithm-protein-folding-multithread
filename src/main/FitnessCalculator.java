@@ -1,7 +1,6 @@
 package main;
 
-import main.direction.relative.RelativeDirection;
-import main.node.Node;
+import main.direction.RelativeDirection;
 import main.node.Structure;
 
 import java.util.List;
