@@ -97,8 +97,7 @@ public class FoldingStructureBuilder {
                 return false;
             }
 
-            currentNode = new Node(currentNode, new Position(move.getX(), move.getY()));
-            nodeStructure[move.getX()][move.getY()] = currentNode;
+            addNewNodeToNodeStructure(move);
         }
         return true;
     }
@@ -119,6 +118,11 @@ public class FoldingStructureBuilder {
 
     private boolean isOverlapping(Node node) {
         return node != null;
+    }
+
+    private void addNewNodeToNodeStructure(Move move) {
+        currentNode = new Node(currentNode, new Position(move.getX(), move.getY()));
+        nodeStructure[move.getX()][move.getY()] = currentNode;
     }
 
     private Structure returnOverlappingStructure() {
