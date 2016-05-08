@@ -28,8 +28,7 @@ public class Move {
         int yOld = y;
         x = x - yLastMove;
         y = y + xLastMove;
-        xLastMove = x - xOld;
-        yLastMove = y - yOld;
+        calculateLastMove(xOld, yOld);
 
         convertPositionToTorus();
     }
@@ -39,10 +38,14 @@ public class Move {
         int yOld = y;
         x = x + yLastMove;
         y = y - xLastMove;
-        xLastMove = x - xOld;
-        yLastMove = y - yOld;
+        calculateLastMove(xOld, yOld);
 
         convertPositionToTorus();
+    }
+
+    private void calculateLastMove(int xOld, int yOld) {
+        xLastMove = x - xOld;
+        yLastMove = y - yOld;
     }
 
     public void moveStraight() {
