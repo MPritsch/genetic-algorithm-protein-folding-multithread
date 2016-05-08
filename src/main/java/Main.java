@@ -1,11 +1,10 @@
-package main;
-
-import main.examples.Examples;
+import algorithm.GeneticAlgorithm;
+import algorithm.examples.Examples;
 
 public class Main {
 
     final static int GENERATION_AMOUNT = 10;
-    final static int POPULATION_AMOUNT = 200;
+    final static int POPULATION_AMOUNT = 100;
     final static float MUTATION_RATE = 0.05F;
     final static float CROSSOVER_RATE = 0.25F;
 

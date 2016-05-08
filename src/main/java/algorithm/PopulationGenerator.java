@@ -1,13 +1,13 @@
-package main;
+package algorithm;
 
-import main.evaluation.direction.RelativeDirection;
+import algorithm.evaluation.direction.RelativeDirection;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static main.evaluation.direction.RelativeDirection.*;
+import static algorithm.evaluation.direction.RelativeDirection.*;
 
 /**
  * Created by marcus on 07.05.16.

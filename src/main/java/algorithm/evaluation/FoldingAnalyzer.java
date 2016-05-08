@@ -1,8 +1,8 @@
-package main.evaluation;
+package algorithm.evaluation;
 
-import main.evaluation.counter.DirectHydrophobNeighborsCounter;
-import main.evaluation.counter.HydrophobNeighborsCounter;
-import main.evaluation.node.Structure;
+import algorithm.evaluation.counter.DirectHydrophobNeighborsCounter;
+import algorithm.evaluation.counter.HydrophobNeighborsCounter;
+import algorithm.evaluation.node.Structure;
 
 /**
  * Created by marcus on 19.04.16.

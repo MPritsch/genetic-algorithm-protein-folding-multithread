@@ -1,7 +1,9 @@
-package main;
+package algorithm;
 
-import main.evaluation.FitnessCalculator;
-import main.evaluation.node.Structure;
+import algorithm.evaluation.FitnessCalculator;
+import algorithm.evaluation.node.Structure;
+
+import java.util.List;
 
 /**
  * Created by marcus on 08.05.16.
@@ -53,18 +55,22 @@ public class GeneticAlgorithm {
         population = fitnessCalculator.calculateFitnessOfPopulation(population);
 
 
-        int generation = 1;
+        int generation = 0;
 
         Structure bestProtein = population.printStatusAndGetBestStructure(generation);
 
 
-        while (generation < generationAmount) {
+        while (generation < generationAmount - 1) {
             generation++;
 
             //TODO selection
+            List<Structure> selection = population.buildSelection(); //selection
+
             //TODO crossover
             //TODO mutation
+
             //TODO evaluation
+            fitnessCalculator.calculateFitnessOfPopulation(population); //evaluation
 
             bestProtein = population.printStatusAndGetBestStructure(generation);
         }

@@ -1,8 +1,8 @@
-package main.evaluation;
+package algorithm.evaluation;
 
-import main.Population;
-import main.evaluation.direction.RelativeDirection;
-import main.evaluation.node.Structure;
+import algorithm.Population;
+import algorithm.evaluation.direction.RelativeDirection;
+import algorithm.evaluation.node.Structure;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class FitnessCalculator {
     }
 
     public Population calculateFitnessOfPopulation(Population population) {
-        for (List<RelativeDirection> gensOfSingleProtein : population.getGenpool()) {
+        for (List<RelativeDirection> gensOfSingleProtein : population.getGenepool()) {
             Structure structure = buildStructureWithFitness(gensOfSingleProtein);
             population.addStructure(structure);
         }

@@ -1,6 +1,7 @@
-package main.evaluation.direction;
+package algorithm.evaluation.direction;
 
-import main.Torus;
+
+import algorithm.Torus;
 
 /**
  * Created by marcus on 07.05.16.

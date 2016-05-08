@@ -1,8 +1,8 @@
-package main.evaluation.node;
+package algorithm.evaluation.node;
 
+import algorithm.evaluation.direction.RelativeDirection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import main.evaluation.direction.RelativeDirection;
 
 import java.util.List;
 

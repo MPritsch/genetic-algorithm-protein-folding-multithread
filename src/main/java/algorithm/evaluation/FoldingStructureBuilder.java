@@ -1,10 +1,10 @@
-package main.evaluation;
+package algorithm.evaluation;
 
-import main.evaluation.direction.Move;
-import main.evaluation.direction.RelativeDirection;
-import main.evaluation.node.Node;
-import main.evaluation.node.Position;
-import main.evaluation.node.Structure;
+import algorithm.evaluation.direction.Move;
+import algorithm.evaluation.direction.RelativeDirection;
+import algorithm.evaluation.node.Node;
+import algorithm.evaluation.node.Position;
+import algorithm.evaluation.node.Structure;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package main.evaluation.direction;
+package algorithm.evaluation.direction;
 
 /**
  * Created by marcus on 02.05.16.

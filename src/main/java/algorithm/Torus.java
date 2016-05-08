@@ -1,4 +1,4 @@
-package main;
+package algorithm;
 
 /**
  * Created by marcus on 08.05.16.

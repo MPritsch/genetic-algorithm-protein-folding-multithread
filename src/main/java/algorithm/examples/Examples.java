@@ -1,4 +1,4 @@
-package main.examples;
+package algorithm.examples;
 
 /**
  * Created by marcus on 19.04.16.

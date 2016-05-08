@@ -1,16 +1,14 @@
-package test;
-
-import main.evaluation.FoldingStructureBuilder;
-import main.evaluation.direction.RelativeDirection;
-import main.evaluation.node.Node;
-import main.evaluation.node.Position;
-import main.evaluation.node.Structure;
+import algorithm.evaluation.FoldingStructureBuilder;
+import algorithm.evaluation.direction.RelativeDirection;
+import algorithm.evaluation.node.Node;
+import algorithm.evaluation.node.Position;
+import algorithm.evaluation.node.Structure;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static main.evaluation.direction.RelativeDirection.*;
+import static algorithm.evaluation.direction.RelativeDirection.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 

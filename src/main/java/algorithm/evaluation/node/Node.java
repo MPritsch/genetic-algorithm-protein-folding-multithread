@@ -1,4 +1,4 @@
-package main.evaluation.node;
+package algorithm.evaluation.node;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,4 +1,4 @@
-package main.evaluation.node;
+package algorithm.evaluation.node;
 
 /**
  * Created by marcus on 19.04.16.
