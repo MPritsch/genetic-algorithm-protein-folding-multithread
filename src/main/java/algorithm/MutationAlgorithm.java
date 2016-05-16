@@ -1,8 +1,8 @@
 package algorithm;
 
 import algorithm.evaluation.direction.RelativeDirection;
-import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -22,7 +22,7 @@ public class MutationAlgorithm {
     private Random rand;
 
     public MutationAlgorithm() {
-        rand = new Random();
+        rand = new Random(Instant.now().toEpochMilli());
     }
 
     public List<List<RelativeDirection>> mutate(List<List<RelativeDirection>> genepool, float mutationRate) {
@@ -36,27 +36,32 @@ public class MutationAlgorithm {
 
             List<RelativeDirection> previousProtein = genepool.get(genepoolIndex);
             RelativeDirection previousDirection = previousProtein.get(geneIndex);
-            RelativeDirection nextDirection = STRAIGHT;
-            boolean randomBool = rand.nextBoolean();
 
-            //retrieve random different direction
-            switch (previousDirection) {
-                case RIGHT:
-                    nextDirection = randomBool ? LEFT : STRAIGHT;
-                    break;
-                case LEFT:
-                    nextDirection = randomBool ? RIGHT : STRAIGHT;
-                    break;
-                case STRAIGHT:
-                    nextDirection = randomBool ? LEFT : RIGHT;
-                    break;
-            }
+            RelativeDirection nextDirection = getRandomNextDirection(previousDirection);
 
             previousProtein.set(geneIndex, nextDirection);
-            genepool.set(genepoolIndex, previousProtein);
         }
 
         return genepool;
+    }
+
+    private RelativeDirection getRandomNextDirection(RelativeDirection previousDirection) {
+        RelativeDirection nextDirection = STRAIGHT;
+        boolean randomBool = rand.nextBoolean();
+
+        switch (previousDirection) {
+            case RIGHT:
+                nextDirection = randomBool ? LEFT : STRAIGHT;
+                break;
+            case LEFT:
+                nextDirection = randomBool ? RIGHT : STRAIGHT;
+                break;
+            case STRAIGHT:
+                nextDirection = randomBool ? LEFT : RIGHT;
+                break;
+        }
+
+        return nextDirection;
     }
 
     private Set<Integer> buildGenePositionsForMutation() {

@@ -1,18 +1,14 @@
 package algorithm;
 
+import algorithm.evaluation.FitnessCalculator;
 import lombok.Getter;
 import lombok.Setter;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +26,7 @@ public class Population {
     private List<Structure> structures;
 
     private int totalFitness;
+    private float averageFitness;
 
     DefaultCategoryDataset lineChartDataset;
 
@@ -48,7 +45,28 @@ public class Population {
         structures.add(structure);
     }
 
-    public Structure printStatusAndGetBestStructure(int currentGeneration, Structure bestProtein) {
+    public Structure saveResultsAndGetBestStructure(int currentGeneration, Structure bestProtein) {
+        Structure currentBestProtein = calculateStatisticAndGetCurrentBestProtein();
+
+        bestProtein = getBestProtein(bestProtein, currentBestProtein);
+        saveResults(currentGeneration, bestProtein, currentBestProtein);
+        bestProtein.printStructure();
+
+        return bestProtein;
+    }
+
+    private Structure getBestProtein(Structure bestProtein, Structure currentBestProtein) {
+        if (currentBestProtein.getFitness() > 1) {
+            if(currentBestProtein.getFitness() > bestProtein.getFitness()){
+                bestProtein = currentBestProtein;
+            }
+        } else {
+            System.out.println("No valid structure was generated.");
+        }
+        return bestProtein;
+    }
+
+    private Structure calculateStatisticAndGetCurrentBestProtein() {
         totalFitness = 0;
         Structure currentBestProtein = structures.get(0);
 
@@ -58,49 +76,31 @@ public class Population {
             if (fitness > currentBestProtein.getFitness()) {
                 currentBestProtein = structure;
             }
-
         }
 
-        float averageFitness = (float) totalFitness / (float) structures.size();
+        averageFitness = (float) totalFitness / (float) structures.size();
 
-        if (currentBestProtein.getFitness() > 1) {
-            if(currentBestProtein.getFitness() > bestProtein.getFitness()){
-                bestProtein = currentBestProtein;
-            }
-            bestProtein.printStructure();
-        } else {
-            System.out.println("No valid structure was generated.");
-        }
+        return currentBestProtein;
+    }
 
+    private void saveResults(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
+        printStatusOfCurrentGeneration(currentGeneration, bestProtein, currentBestProtein);
+        saveValuesForChart(currentGeneration, bestProtein, currentBestProtein);
+    }
+
+    private void printStatusOfCurrentGeneration(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
         System.out.println("Generation " + currentGeneration + ":");
         System.out.println("  Total Fitness: " + totalFitness);
         System.out.println("  Average Fitness " + averageFitness);
         System.out.println("  Best fitness in generation: " + currentBestProtein.getFitness());
         System.out.println("  Best overall fitness: " + bestProtein.getFitness());
+    }
 
-
-//        lineChartDataset.addValue(totalFitness, "total fitness", String.valueOf(currentGeneration));
+    private void saveValuesForChart(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
+        //        lineChartDataset.addValue(totalFitness, "total fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(averageFitness, "average fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(bestProtein.getFitness(), "best overall fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(currentBestProtein.getFitness(), "best fitness in generation", String.valueOf(currentGeneration));
-
-        JFreeChart lineChartObject = ChartFactory.createLineChart(
-                "Genetic Algorithm flow", "Generation",
-                "Fitness",
-                lineChartDataset, PlotOrientation.VERTICAL,
-                true, true, false);
-
-        int width = 1280;
-        int height = 720;
-        File lineChart = new File("GeneticAlgorithm.jpeg");
-
-        try {
-            ChartUtilities.saveChartAsJPEG(lineChart, lineChartObject, width, height);
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-        return currentBestProtein;
     }
 
     public void buildSelectionOnGenepool() {
@@ -134,5 +134,9 @@ public class Population {
     public void mutate(float mutationRate) {
         MutationAlgorithm mutationAlgorithm = new MutationAlgorithm();
         this.genepool = mutationAlgorithm.mutate(genepool, mutationRate);
+    }
+
+    public void evaluate(String primarySequence) {
+        new FitnessCalculator(primarySequence).calculateFitnessOfPopulation(this);
     }
 }
