@@ -3,8 +3,6 @@ package algorithm;
 import algorithm.evaluation.FitnessCalculator;
 import algorithm.evaluation.node.Structure;
 
-import java.util.List;
-
 /**
  * Created by marcus on 08.05.16.
  */
@@ -59,14 +57,13 @@ public class GeneticAlgorithm {
 
         Structure bestProtein = population.printStatusAndGetBestStructure(generation);
 
-
         while (generation < generationAmount - 1) {
             generation++;
 
             //TODO selection
-            List<Structure> selection = population.buildSelection(); //selection
-
+            population.buildSelectionOnGenepool(); //selection
             //TODO crossover
+            population.crossover(crossoverRate);
             //TODO mutation
 
             //TODO evaluation

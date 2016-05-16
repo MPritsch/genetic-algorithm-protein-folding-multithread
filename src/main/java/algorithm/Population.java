@@ -67,10 +67,15 @@ public class Population {
         return bestProtein;
     }
 
-    public List<Structure> buildSelection() {
+    public void buildSelectionOnGenepool() {
         List<Pair> weightedStructures = buildWeightedStructures();
 
-        return pickWeightedStructuresRandomly(weightedStructures);
+        List<Structure> selection =  pickWeightedStructuresRandomly(weightedStructures);
+
+        genepool.clear();
+        for (Structure structure : selection) {
+            genepool.add(structure.getRelativeDirections());
+        }
     }
 
     private List<Pair> buildWeightedStructures() {
@@ -83,5 +88,10 @@ public class Population {
         List<Structure> selection = Arrays.asList(Arrays.copyOf(randomSelection, randomSelection.length, Structure[].class));
 
         return selection;
+    }
+
+    public void crossover(float crossoverRate) {
+        CrossoverAlgorithm crossoverAlgorithm = new CrossoverAlgorithm(crossoverRate, genepool.size());
+        crossoverAlgorithm.crossoverGenepoolOfPopulation(this);
     }
 }
