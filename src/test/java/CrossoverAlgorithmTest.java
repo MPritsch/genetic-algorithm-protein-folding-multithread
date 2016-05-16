@@ -28,13 +28,8 @@ public class CrossoverAlgorithmTest {
         genepool.add(Arrays.asList(RIGHT, RIGHT));
         genepool.add(Arrays.asList(LEFT, LEFT));
 
-        Population population = new Population(populationSize);
-        population.setGenepool(genepool);
-
         CrossoverAlgorithm crossoverAlgorithm = new CrossoverAlgorithm(crossoverRate, populationSize);
-        population = crossoverAlgorithm.crossoverGenepoolOfPopulation(population);
-
-        genepool = population.getGenepool();
+        genepool = crossoverAlgorithm.crossoverGenepoolOfPopulation(genepool);
 
         boolean firstChildCorrect = false;
         boolean secondChildCorrect = false;

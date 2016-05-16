@@ -24,8 +24,7 @@ public class CrossoverAlgorithm {
         this.rand = new Random(Instant.now().toEpochMilli());
     }
 
-    public Population crossoverGenepoolOfPopulation(Population population) {
-        List<List<RelativeDirection>> oldGenepool = population.getGenepool();
+    public List<List<RelativeDirection>> crossoverGenepoolOfPopulation(List<List<RelativeDirection>> oldGenepool) {
         List<List<RelativeDirection>> crossoveredGenepool = new ArrayList<>();
 
         for (int i = 0; i < crossoverTimes; i++) {
@@ -36,9 +35,8 @@ public class CrossoverAlgorithm {
         }
 
         oldGenepool.addAll(crossoveredGenepool);
-        population.setGenepool(oldGenepool);
 
-        return population;
+        return oldGenepool;
     }
 
     private List<RelativeDirection> getParentAndRemoveFromPool(List<List<RelativeDirection>> oldGenepool) {

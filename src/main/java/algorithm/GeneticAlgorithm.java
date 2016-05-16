@@ -55,22 +55,21 @@ public class GeneticAlgorithm {
 
         int generation = 0;
 
-        Structure bestProtein = population.printStatusAndGetBestStructure(generation);
+        Structure bestProtein = population.printStatusAndGetBestStructure(generation, new Structure());
 
         while (generation < generationAmount - 1) {
             generation++;
 
-            //TODO selection
             population.buildSelectionOnGenepool(); //selection
-            //TODO crossover
             population.crossover(crossoverRate);
-            //TODO mutation
+            population.mutate(mutationRate);
 
-            //TODO evaluation
             fitnessCalculator.calculateFitnessOfPopulation(population); //evaluation
 
-            bestProtein = population.printStatusAndGetBestStructure(generation);
+            Structure generationsBestProtein = population.printStatusAndGetBestStructure(generation, bestProtein);
+            if(generationsBestProtein.getFitness() > bestProtein.getFitness()){
+                bestProtein = generationsBestProtein;
+            }
         }
-
     }
 }

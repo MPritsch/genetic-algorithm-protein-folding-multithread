@@ -4,6 +4,7 @@ import algorithm.Population;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ public class FitnessCalculator {
     }
 
     public Population calculateFitnessOfPopulation(Population population) {
+        population.setStructures(new ArrayList<>());
+
         for (List<RelativeDirection> gensOfSingleProtein : population.getGenepool()) {
             Structure structure = buildStructureWithFitness(gensOfSingleProtein);
             population.addStructure(structure);
