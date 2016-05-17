@@ -1,17 +1,13 @@
 import algorithm.CrossoverAlgorithm;
-import algorithm.Population;
 import algorithm.evaluation.direction.RelativeDirection;
 import org.junit.Test;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import static algorithm.evaluation.direction.RelativeDirection.LEFT;
 import static algorithm.evaluation.direction.RelativeDirection.RIGHT;
-import static algorithm.evaluation.direction.RelativeDirection.STRAIGHT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -51,7 +47,7 @@ public class CrossoverAlgorithmTest {
 
     @Test
     public void crossoverAmount() {
-        //TODO check why crossover count isnt constant
+        //Doesnt work 100%, because Lists are compared, not equaled...
 //        Random rand = new Random(Instant.now().toEpochMilli());
 //
 //        List<Integer> counts = new ArrayList<>();
@@ -82,15 +78,11 @@ public class CrossoverAlgorithmTest {
 //            genepool.add(protein);
 //        }
 //
-//        Population population = new Population(populationSize);
 //        List<List<RelativeDirection>> genepoolForPopulation = new ArrayList<>();
 //        genepoolForPopulation.addAll(genepool);
-//        population.setGenepool(genepoolForPopulation);
 //
 //        CrossoverAlgorithm crossoverAlgorithm = new CrossoverAlgorithm(crossoverRate, populationSize);
-//        population = crossoverAlgorithm.crossoverGenepoolOfPopulation(population);
-//
-//        List<List<RelativeDirection>> newGenepool = population.getGenepool();
+//        List<List<RelativeDirection>> newGenepool = crossoverAlgorithm.crossoverGenepoolOfPopulation(genepool);
 //
 //        int crossoverCount = 0;
 //
@@ -100,5 +92,40 @@ public class CrossoverAlgorithmTest {
 //            }
 //        }
 //        assertThat(crossoverCount).isEqualTo(50);
+    }
+
+    @Test
+    public void a () {
+//        List<RelativeDirection> a = Arrays.asList(RIGHT, RIGHT);
+//        List<RelativeDirection> b = Arrays.asList(RIGHT, RIGHT);
+//
+//        List<List<RelativeDirection>> c  = new ArrayList<>();
+//        c.add(a);
+//        c.add(b);
+//
+//        List<List<RelativeDirection>> d = c;
+//        List<RelativeDirection> a1 = d.get(0);
+//        List<RelativeDirection> b1 = d.get(1);
+//
+//        List<RelativeDirection> a2 = a1.subList(0, 1);
+//        List<RelativeDirection> a3 = a1.subList(1,2);
+//
+//        List<RelativeDirection> b2 = b1.subList(0, 1);
+//        List<RelativeDirection> b3 = b1.subList(1, 2);
+//
+//        List<RelativeDirection> a4 = new ArrayList<>();
+//        List<RelativeDirection> b4 = new ArrayList<>();
+//
+//        a4.addAll(a2);
+//        a4.addAll(b3);
+//        b4.addAll(b2);
+//        b4.addAll(a3);
+//
+//        d.clear();
+//        d.add(a4);
+//        d.add(b4);
+//
+//        assertThat(d.contains(c.get(0))).isTrue();
+//        assertThat(d.contains(c.get(1))).isTrue();
     }
 }
