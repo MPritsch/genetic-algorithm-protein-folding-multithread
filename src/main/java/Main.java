@@ -11,12 +11,12 @@ import java.io.File;
 
 public class Main {
 
-    final static int GENERATION_AMOUNT = 10;
-    final static int POPULATION_AMOUNT = 200;
+    final static int GENERATION_AMOUNT = 163;
+    final static int POPULATION_AMOUNT = 300;
     final static float MUTATION_RATE = 0.01F;
     final static float CROSSOVER_RATE = 0.25F;
 
-    final static String PRIMARY_SEQUENCE = Examples.SEQ20;
+    final static String PRIMARY_SEQUENCE = Examples.SEQ48;
 
     public static void main(String[] args) {
         Population population = new GeneticAlgorithm()

@@ -22,27 +22,29 @@ public class Structure {
 
     private List<RelativeDirection> relativeDirections;
 
-    public boolean isValidAndNotOverlappingStructure(){
+    public boolean isValidAndNotOverlappingStructure() {
         return valid && !overlapping;
     }
 
     public void printStructure() {
-        Node[][] rotatedNodes = rotate(this.nodes);
+        if (nodes != null) {
+            Node[][] rotatedNodes = rotate(this.nodes);
 
-        System.out.println();
-
-        for (int i = 0; i < rotatedNodes.length; i++) {
-            for (int j = 0; j < rotatedNodes.length; j++) {
-                Node nodeEntry = rotatedNodes[i][j];
-                String status = "";
-                if (nodeEntry != null) {
-                    status = nodeEntry.isHydrophob() ? "h" : "p";
-                    System.out.print(nodeEntry.getId() + status + " ");
-                } else {
-                    System.out.print("   ");
-                }
-            }
             System.out.println();
+
+            for (int i = 0; i < rotatedNodes.length; i++) {
+                for (int j = 0; j < rotatedNodes.length; j++) {
+                    Node nodeEntry = rotatedNodes[i][j];
+                    String status = "";
+                    if (nodeEntry != null) {
+                        status = nodeEntry.isHydrophob() ? "h" : "p";
+                        System.out.print(nodeEntry.getId() + status + " ");
+                    } else {
+                        System.out.print("   ");
+                    }
+                }
+                System.out.println();
+            }
         }
     }
 
