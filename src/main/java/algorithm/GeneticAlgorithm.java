@@ -1,6 +1,5 @@
 package algorithm;
 
-import algorithm.evaluation.node.Structure;
 import lombok.NoArgsConstructor;
 
 /**
@@ -50,7 +49,11 @@ public class GeneticAlgorithm {
 
         int generation = 0;
 
-        Structure bestProtein = population.saveResultsAndGetBestStructure(generation, new Structure());
+        population.saveResults(generation);
+
+        GraphicOutput frame = new GraphicOutput();
+        frame.setProtein(population.getBestProtein());
+        frame.repaint();
 
         while (generation < generationAmount - 1) {
             generation++;
@@ -61,10 +64,10 @@ public class GeneticAlgorithm {
 
             population.evaluate(primarySequence);
 
-            Structure generationsBestProtein = population.saveResultsAndGetBestStructure(generation, bestProtein);
-            if(generationsBestProtein.getFitness() > bestProtein.getFitness()){
-                bestProtein = generationsBestProtein;
-            }
+            population.saveResults(generation);
+
+            frame.setProtein(population.getBestProtein());
+            frame.repaint();
         }
 
         return population;

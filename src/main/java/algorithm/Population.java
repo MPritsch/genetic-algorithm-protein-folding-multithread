@@ -24,6 +24,7 @@ public class Population {
     private List<List<RelativeDirection>> genepool;
 
     private List<Structure> structures;
+    private Structure bestProtein;
 
     private int totalFitness;
     private float averageFitness;
@@ -33,6 +34,7 @@ public class Population {
     public Population(int populationSize) {
         genepool = new ArrayList<>(populationSize);
         structures = new ArrayList<>(populationSize);
+        bestProtein = new Structure();
 
         lineChartDataset = new DefaultCategoryDataset();
     }
@@ -45,17 +47,14 @@ public class Population {
         structures.add(structure);
     }
 
-    public Structure saveResultsAndGetBestStructure(int currentGeneration, Structure bestProtein) {
+    public void saveResults(int currentGeneration) {
         Structure currentBestProtein = calculateStatisticAndGetCurrentBestProtein();
 
-        bestProtein = getBestProtein(bestProtein, currentBestProtein);
-        saveResults(currentGeneration, bestProtein, currentBestProtein);
-        bestProtein.printStructure();
-
-        return bestProtein;
+        checkForNewBestProtein(currentBestProtein);
+        saveAndPrintResults(currentGeneration, currentBestProtein);
     }
 
-    private Structure getBestProtein(Structure bestProtein, Structure currentBestProtein) {
+    private void checkForNewBestProtein(Structure currentBestProtein) {
         if (currentBestProtein.getFitness() > 1) {
             if(currentBestProtein.getFitness() > bestProtein.getFitness()){
                 bestProtein = currentBestProtein;
@@ -63,7 +62,6 @@ public class Population {
         } else {
             System.out.println("No valid structure was generated.");
         }
-        return bestProtein;
     }
 
     private Structure calculateStatisticAndGetCurrentBestProtein() {
@@ -83,12 +81,13 @@ public class Population {
         return currentBestProtein;
     }
 
-    private void saveResults(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
-        printStatusOfCurrentGeneration(currentGeneration, bestProtein, currentBestProtein);
-        saveValuesForChart(currentGeneration, bestProtein, currentBestProtein);
+    private void saveAndPrintResults(int currentGeneration, Structure currentBestProtein) {
+        printStatusOfCurrentGeneration(currentGeneration, currentBestProtein);
+//        bestProtein.printStructure();
+        saveValuesForChart(currentGeneration, currentBestProtein);
     }
 
-    private void printStatusOfCurrentGeneration(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
+    private void printStatusOfCurrentGeneration(int currentGeneration, Structure currentBestProtein) {
         System.out.println("Generation " + currentGeneration + ":");
         System.out.println("  Total Fitness: " + totalFitness);
         System.out.println("  Average Fitness " + averageFitness);
@@ -96,7 +95,7 @@ public class Population {
         System.out.println("  Best overall fitness: " + bestProtein.getFitness());
     }
 
-    private void saveValuesForChart(int currentGeneration, Structure bestProtein, Structure currentBestProtein) {
+    private void saveValuesForChart(int currentGeneration, Structure currentBestProtein) {
         //        lineChartDataset.addValue(totalFitness, "total fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(averageFitness, "average fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(bestProtein.getFitness(), "best overall fitness", String.valueOf(currentGeneration));

@@ -1,13 +1,19 @@
 import algorithm.GeneticAlgorithm;
+import algorithm.GraphicOutput;
 import algorithm.Population;
+import algorithm.evaluation.node.Structure;
 import algorithm.examples.Examples;
+import com.google.common.base.Stopwatch;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
@@ -19,6 +25,7 @@ public class Main {
     final static String PRIMARY_SEQUENCE = Examples.SEQ48;
 
     public static void main(String[] args) {
+        Stopwatch s = Stopwatch.createStarted();
         Population population = new GeneticAlgorithm()
                 .usesPrimarySequence(PRIMARY_SEQUENCE)
                 .hasGenerations(GENERATION_AMOUNT)
@@ -27,7 +34,13 @@ public class Main {
                 .hasMutationRateOf(MUTATION_RATE)
                 .generate();
 
+
+        System.out.println("Calculation took: " + s.elapsed(TimeUnit.MILLISECONDS));
         saveChart(population);
+
+//        GraphicOutput frame = new GraphicOutput();
+//        frame.setProtein(population.getBestProtein());
+//        frame.revalidate();
     }
 
     private static void saveChart(Population population) {
@@ -43,7 +56,7 @@ public class Main {
 
         try {
             ChartUtilities.saveChartAsJPEG(lineChart, lineChartObject, 1280, 720);
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
