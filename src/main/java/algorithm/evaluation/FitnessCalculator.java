@@ -33,7 +33,7 @@ public class FitnessCalculator {
     private Structure buildStructureWithFitness(List<RelativeDirection> relativeDirections) {
         Structure structure = foldingStructureBuilder.buildStructure(relativeDirections);
 
-        int fitness = foldingAnalyzer.calculateTotalFitness(structure);
+        float fitness = foldingAnalyzer.calculateTotalFitness(structure);
 
         structure.setFitness(fitness);
 

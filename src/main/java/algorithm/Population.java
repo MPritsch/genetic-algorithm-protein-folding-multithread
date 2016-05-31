@@ -26,8 +26,10 @@ public class Population {
     private List<Structure> structures;
     private Structure bestProtein;
 
-    private int totalFitness;
+    private float totalFitness;
     private float averageFitness;
+    private float averageNeighborCounter;
+    private float averageOverlapCounter;
 
     DefaultCategoryDataset lineChartDataset;
 
@@ -55,8 +57,8 @@ public class Population {
     }
 
     private void checkForNewBestProtein(Structure currentBestProtein) {
-        if (currentBestProtein.getFitness() > 1) {
-            if(currentBestProtein.getFitness() > bestProtein.getFitness()){
+        if (currentBestProtein.getFitness() > 0) {
+            if (currentBestProtein.getFitness() > bestProtein.getFitness()) {
                 bestProtein = currentBestProtein;
             }
         } else {
@@ -66,17 +68,23 @@ public class Population {
 
     private Structure calculateStatisticAndGetCurrentBestProtein() {
         totalFitness = 0;
+        int totalNeighborCounter = 0;
+        int totalOverlapCounter = 0;
         Structure currentBestProtein = structures.get(0);
 
         for (Structure structure : structures) {
-            int fitness = structure.getFitness();
+            float fitness = structure.getFitness();
             totalFitness += fitness;
+            totalNeighborCounter += structure.getValidNeighborCount();
+            totalOverlapCounter += structure.getOverlappCounter();
             if (fitness > currentBestProtein.getFitness()) {
                 currentBestProtein = structure;
             }
         }
 
         averageFitness = (float) totalFitness / (float) structures.size();
+        averageNeighborCounter = (float) totalNeighborCounter / (float) structures.size();
+        averageOverlapCounter = (float) totalOverlapCounter / (float) structures.size();
 
         return currentBestProtein;
     }
@@ -91,8 +99,16 @@ public class Population {
         System.out.println("Generation " + currentGeneration + ":");
         System.out.println("  Total Fitness: " + totalFitness);
         System.out.println("  Average Fitness " + averageFitness);
-        System.out.println("  Best fitness in generation: " + currentBestProtein.getFitness());
-        System.out.println("  Best overall fitness: " + bestProtein.getFitness());
+        System.out.println("  Average neighbor count: " + averageNeighborCounter);
+        System.out.println("  Average overlap count: " + averageOverlapCounter);
+        System.out.println("  Best overall: Fitness: " + bestProtein.getFitness());
+        System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
+        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
+        System.out.println("  Best overall: Valid neighbor count: " + bestProtein.getValidNeighborCount());
+        System.out.println("  Best in generation: fitness: " + currentBestProtein.getFitness());
+        System.out.println("  Best in generation: neighbor count: " + currentBestProtein.getNeighborCounter());
+        System.out.println("  Best in generation: Overlaps " + currentBestProtein.getOverlappCounter());
+        System.out.println("  Best in generation: Valid neighbor count: " + currentBestProtein.getValidNeighborCount());
     }
 
     private void saveValuesForChart(int currentGeneration, Structure currentBestProtein) {
@@ -105,7 +121,7 @@ public class Population {
     public void buildSelectionOnGenepool() {
         List<Pair> weightedStructures = buildWeightedStructures();
 
-        List<Structure> selection =  pickWeightedStructuresRandomly(weightedStructures);
+        List<Structure> selection = pickWeightedStructuresRandomly(weightedStructures);
 
         genepool.clear();
         for (Structure structure : selection) {
@@ -114,11 +130,11 @@ public class Population {
     }
 
     private List<Pair> buildWeightedStructures() {
-        return structures.stream().map(i -> new Pair(i, (double) i.getFitness() /  (double) totalFitness)).collect(Collectors.toList());
+        return structures.stream().map(i -> new Pair(i, (double) i.getFitness() / (double) totalFitness)).collect(Collectors.toList());
     }
 
     private List<Structure> pickWeightedStructuresRandomly(List<Pair> weightedStructures) {
-        Object[] randomSelection =  new EnumeratedDistribution(weightedStructures).sample(weightedStructures.size());
+        Object[] randomSelection = new EnumeratedDistribution(weightedStructures).sample(weightedStructures.size());
 
         List<Structure> selection = Arrays.asList(Arrays.copyOf(randomSelection, randomSelection.length, Structure[].class));
 

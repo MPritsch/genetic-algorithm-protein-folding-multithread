@@ -14,16 +14,22 @@ import java.util.List;
 public class Structure {
 
     private boolean valid = true;
-    private boolean overlapping = false;
-    private int fitness;
+    private int overlappCounter = 0;
+    private int neighborCounter = 0;
+    private int directNeighborCounter = 0;
+    private float fitness = 0;
 
     private Node startNode;
     private Node[][] nodes;
 
     private List<RelativeDirection> relativeDirections;
 
-    public boolean isValidAndNotOverlappingStructure() {
-        return valid && !overlapping;
+    public void addToOverlappingCounter() {
+        ++overlappCounter;
+    }
+
+    public int getValidNeighborCount() {
+        return neighborCounter - directNeighborCounter;
     }
 
     public void printStructure() {

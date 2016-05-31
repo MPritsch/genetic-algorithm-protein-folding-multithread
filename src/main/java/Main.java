@@ -18,11 +18,11 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     final static int GENERATION_AMOUNT = 163;
-    final static int POPULATION_AMOUNT = 300;
+    final static int POPULATION_AMOUNT = 1000;
     final static float MUTATION_RATE = 0.01F;
     final static float CROSSOVER_RATE = 0.25F;
 
-    final static String PRIMARY_SEQUENCE = Examples.SEQ48;
+    final static String PRIMARY_SEQUENCE = Examples.SEQ300;
 
     public static void main(String[] args) {
         Stopwatch s = Stopwatch.createStarted();

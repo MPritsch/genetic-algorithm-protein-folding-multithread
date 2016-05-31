@@ -17,19 +17,34 @@ public class FoldingAnalyzer {
         directNeighborCount = 0;
     }
 
-    public int calculateTotalFitness(Structure structure) {
-        if (structure.isValidAndNotOverlappingStructure()) {
+    public float calculateTotalFitness(Structure structure) {
+        if (structure.isValid()) {
             analyzeFolding(structure);
 
-            int totalFitness = 1 + (neighborCount - directNeighborCount);
+
+            //todo make fitting evaluation algorithm
+            //todo make it a value between 0-1
+            float bonus = (float) 1 + (float) structure.getValidNeighborCount();
+            float malus = (float) 1 + (float) structure.getOverlappCounter();
+
+            float totalFitness = 0;
+            totalFitness = bonus/malus;
+//            totalFitness += bonus;
+//            totalFitness -= malus;
+
+//            float totalFitness = ((float) 1 + structure.getValidNeighborCount())
+//                    / ((float) 1 + ((float) structure.getOverlappCounter() * (float)2));
             return totalFitness;
         }
-        return 1;
+        return 0F;
     }
 
     private void analyzeFolding(Structure structure) {
         neighborCount = countNeighbors(structure);
         directNeighborCount = countDirectNeighbors(structure);
+
+        structure.setNeighborCounter(neighborCount);
+        structure.setDirectNeighborCounter(directNeighborCount);
     }
 
     public int countNeighbors(Structure structure) {

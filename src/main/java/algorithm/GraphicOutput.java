@@ -34,11 +34,12 @@ public class GraphicOutput extends JFrame {
 
     @Override
     public void paint(Graphics g) {
+        //todo move further left (relocate??)
         Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
 
         g2.clearRect(0, 0, WIDTH, HEIGHT);
 
-        int scaling = 15;
+        int scaling = 5;
 
         Integer xPos;
         Integer yPos;

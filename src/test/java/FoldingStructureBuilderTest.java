@@ -53,7 +53,7 @@ public class FoldingStructureBuilderTest {
         Structure structure = foldingStructureBuilder.buildStructure(Arrays.asList(RIGHT, RIGHT, RIGHT, RIGHT));
 
         assertThat(structure.isValid()).isTrue();
-        assertThat(structure.isOverlapping()).isTrue();
+        assertThat(structure.getOverlappCounter()).isEqualTo(1);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class FoldingStructureBuilderTest {
         Node[][] nodes = structure.getNodes();
 
         assertThat(structure.isValid()).isTrue();
-        assertThat(structure.isOverlapping()).isFalse();
+        assertThat(structure.getOverlappCounter()).isEqualTo(0);
 
         Node node = structure.getStartNode();
         assertNode(node, nodes, 0, new Position(2, 3), primarySequence.charAt(0));
