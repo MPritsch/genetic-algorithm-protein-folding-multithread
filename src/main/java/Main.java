@@ -1,8 +1,8 @@
-import algorithm.GeneticAlgorithm;
-import algorithm.GraphicOutput;
+import algorithm.geneticalgorithm.GenerationLimitedAlgorithm;
+import algorithm.geneticalgorithm.GeneticAlgorithm;
 import algorithm.Population;
-import algorithm.evaluation.node.Structure;
 import algorithm.examples.Examples;
+import algorithm.geneticalgorithm.TimeLimitedAlgorithm;
 import com.google.common.base.Stopwatch;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -10,14 +10,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     final static int GENERATION_AMOUNT = 163;
+    final static long TIME_LIMIT = 20000;
     final static int POPULATION_AMOUNT = 1000;
     final static float MUTATION_RATE = 0.01F;
     final static float CROSSOVER_RATE = 0.25F;
@@ -26,9 +25,11 @@ public class Main {
 
     public static void main(String[] args) {
         Stopwatch s = Stopwatch.createStarted();
-        Population population = new GeneticAlgorithm()
+        GeneticAlgorithm geneticAlgorithm = new TimeLimitedAlgorithm().usesTimeLimit(TIME_LIMIT);
+//        GeneticAlgorithm geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT);
+
+        Population population = geneticAlgorithm
                 .usesPrimarySequence(PRIMARY_SEQUENCE)
-                .hasGenerations(GENERATION_AMOUNT)
                 .hasPopulationAmountOf(POPULATION_AMOUNT)
                 .hasCrossoverRateOf(CROSSOVER_RATE)
                 .hasMutationRateOf(MUTATION_RATE)

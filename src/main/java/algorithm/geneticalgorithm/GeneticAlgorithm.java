@@ -1,28 +1,25 @@
-package algorithm;
+package algorithm.geneticalgorithm;
 
+import algorithm.GraphicOutput;
+import algorithm.Population;
+import algorithm.PopulationGenerator;
 import lombok.NoArgsConstructor;
 
 /**
  * Created by marcus on 08.05.16.
  */
 @NoArgsConstructor
-public class GeneticAlgorithm {
+public abstract class GeneticAlgorithm {
 
-    private String primarySequence;
+    protected String primarySequence;
 
-    private int generationAmount;
-    private int populationAmount;
+    protected int populationAmount;
 
-    private float mutationRate;
-    private float crossoverRate;
+    protected float mutationRate;
+    protected float crossoverRate;
 
     public GeneticAlgorithm usesPrimarySequence(String primarySequence) {
         this.primarySequence = primarySequence;
-        return this;
-    }
-
-    public GeneticAlgorithm hasGenerations(int generationAmount) {
-        this.generationAmount = generationAmount;
         return this;
     }
 
@@ -42,6 +39,8 @@ public class GeneticAlgorithm {
     }
 
     public Population generate() {
+        setupStart();
+
         PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
         Population population = populationGenerator.generateStartPopulation();
 
@@ -55,21 +54,10 @@ public class GeneticAlgorithm {
         frame.setProtein(population.getBestProtein());
         frame.repaint();
 
-        while (generation < generationAmount - 1) {
-            generation++;
-
-            population.buildSelectionOnGenepool(); //selection
-            population.crossover(crossoverRate);
-            population.mutate(mutationRate);
-
-            population.evaluate(primarySequence);
-
-            population.saveResults(generation);
-
-            frame.setProtein(population.getBestProtein());
-            frame.repaint();
-        }
-
-        return population;
+        return generateTillLimit(population, frame);
     }
+
+    protected abstract void setupStart();
+
+    protected abstract Population generateTillLimit(Population population, GraphicOutput frame);
 }
