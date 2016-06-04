@@ -110,11 +110,11 @@ public class Population {
         System.out.println("  Average Hemming distance: " + averageHemmingDistance);
         System.out.println("  Best overall: Fitness: " + bestProtein.getFitness());
         System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
-        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
+//        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
         System.out.println("  Best overall: Valid neighbor count: " + bestProtein.getValidNeighborCount());
         System.out.println("  Best in generation: fitness: " + currentBestProtein.getFitness());
         System.out.println("  Best in generation: Overlaps " + currentBestProtein.getOverlappCounter());
-        System.out.println("  Best in generation: Neighbor count: " + currentBestProtein.getNeighborCounter());
+//        System.out.println("  Best in generation: Neighbor count: " + currentBestProtein.getNeighborCounter());
         System.out.println("  Best in generation: Valid neighbor count: " + currentBestProtein.getValidNeighborCount());
     }
 

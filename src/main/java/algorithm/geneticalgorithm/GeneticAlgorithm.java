@@ -5,6 +5,8 @@ import algorithm.Population;
 import algorithm.PopulationGenerator;
 import lombok.NoArgsConstructor;
 
+import javax.swing.*;
+
 /**
  * Created by marcus on 08.05.16.
  */
@@ -21,6 +23,8 @@ public abstract class GeneticAlgorithm {
     protected boolean calculateHemmingDistance;
 
     protected int currentGeneration;
+
+    private GraphicOutput frame;
 
     public GeneticAlgorithm usesPrimarySequence(String primarySequence) {
         this.primarySequence = primarySequence;
@@ -60,14 +64,22 @@ public abstract class GeneticAlgorithm {
         population.calculateHemmingDistance(calculateHemmingDistance);
         population.saveResults(currentGeneration);
 
-        GraphicOutput frame = new GraphicOutput();
-        frame.setProtein(population.getBestProtein());
-        frame.repaint();
+        initializeFrame();
+        paint(population);
 
-        return generateTillLimit(population, frame);
+        return generateTillLimit(population);
     }
 
-    protected void performAlgorithm(Population population, GraphicOutput frame) {
+    private void initializeFrame() {
+        frame = new GraphicOutput();
+    }
+
+    private void paint(final Population population) {
+        frame.setProtein(population.getBestProtein());
+        frame.repaint();
+    }
+
+    protected void performAlgorithm(Population population) {
         currentGeneration++;
 
         population.buildSelectionOnGenepool(); //selection
@@ -79,11 +91,10 @@ public abstract class GeneticAlgorithm {
         population.calculateHemmingDistance(calculateHemmingDistance);
         population.saveResults(currentGeneration);
 
-        frame.setProtein(population.getBestProtein());
-        frame.repaint();
+        paint(population);
     }
 
     protected abstract void setupStart();
 
-    protected abstract Population generateTillLimit(Population population, GraphicOutput frame);
+    protected abstract Population generateTillLimit(Population population);
 }

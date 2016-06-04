@@ -17,12 +17,14 @@ public class Node {
     private boolean hydrophob;
 
     private Position position;
+    private Position absolutePosition;
 
     //Startnode constructor
     public Node(Position startPosition) {
         this.id = 0;
         this.previous = null;
         this.position = startPosition;
+        this.absolutePosition = startPosition;
     }
 
     //following nodes

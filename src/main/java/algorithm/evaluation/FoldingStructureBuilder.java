@@ -119,6 +119,7 @@ public class FoldingStructureBuilder {
 
     private void addNewNodeToNodeStructure(Move move) {
         currentNode = new Node(currentNode, new Position(move.getX(), move.getY()));
+        currentNode.setAbsolutePosition(new Position(move.getXAbsolute(), move.getYAbsolute()));
         nodeStructure[move.getX()][move.getY()] = currentNode;
     }
 }

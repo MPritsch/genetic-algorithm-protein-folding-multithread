@@ -24,9 +24,9 @@ public class TimeLimitedAlgorithm extends GeneticAlgorithm{
     }
 
     @Override
-    protected Population generateTillLimit(Population population, GraphicOutput frame){
+    protected Population generateTillLimit(Population population){
         while (!isOver()) {
-            performAlgorithm(population, frame);
+            performAlgorithm(population);
         }
 
         return population;

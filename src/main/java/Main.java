@@ -1,3 +1,4 @@
+import algorithm.geneticalgorithm.GenerationLimitedAlgorithm;
 import algorithm.geneticalgorithm.GeneticAlgorithm;
 import algorithm.Population;
 import algorithm.examples.Examples;
@@ -26,8 +27,8 @@ public class Main {
 
     public static void main(String[] args) {
         Stopwatch s = Stopwatch.createStarted();
-        GeneticAlgorithm geneticAlgorithm = new TimeLimitedAlgorithm().usesTimeLimit(TIME_LIMIT);
-//        GeneticAlgorithm geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT);
+//        GeneticAlgorithm geneticAlgorithm = new TimeLimitedAlgorithm().usesTimeLimit(TIME_LIMIT);
+        GeneticAlgorithm geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT);
 
         Population population = geneticAlgorithm
                 .usesPrimarySequence(PRIMARY_SEQUENCE)
