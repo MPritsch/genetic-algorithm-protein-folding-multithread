@@ -25,21 +25,8 @@ public class TimeLimitedAlgorithm extends GeneticAlgorithm{
 
     @Override
     protected Population generateTillLimit(Population population, GraphicOutput frame){
-        int generation = 0;
-
         while (!isOver()) {
-            generation++;
-
-            population.buildSelectionOnGenepool(); //selection
-            population.crossover(crossoverRate);
-            population.mutate(mutationRate);
-
-            population.evaluate(primarySequence);
-
-            population.saveResults(generation);
-
-            frame.setProtein(population.getBestProtein());
-            frame.repaint();
+            performAlgorithm(population, frame);
         }
 
         return population;

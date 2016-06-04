@@ -17,21 +17,8 @@ public class GenerationLimitedAlgorithm extends GeneticAlgorithm{
 
     @Override
     protected Population generateTillLimit(Population population, GraphicOutput frame){
-        int generation = 0;
-
-        while (generation < generationAmount - 1) {
-            generation++;
-
-            population.buildSelectionOnGenepool(); //selection
-            population.crossover(crossoverRate);
-            population.mutate(mutationRate);
-
-            population.evaluate(primarySequence);
-
-            population.saveResults(generation);
-
-            frame.setProtein(population.getBestProtein());
-            frame.repaint();
+        while (currentGeneration < generationAmount - 1) {
+            performAlgorithm(population, frame);
         }
 
         return population;

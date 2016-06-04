@@ -1,4 +1,3 @@
-import algorithm.geneticalgorithm.GenerationLimitedAlgorithm;
 import algorithm.geneticalgorithm.GeneticAlgorithm;
 import algorithm.Population;
 import algorithm.examples.Examples;
@@ -16,10 +15,12 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     final static int GENERATION_AMOUNT = 163;
-    final static long TIME_LIMIT = 20000;
+    final static long TIME_LIMIT = 40000;
     final static int POPULATION_AMOUNT = 1000;
-    final static float MUTATION_RATE = 0.01F;
+    final static float MUTATION_RATE = 0.02F;
     final static float CROSSOVER_RATE = 0.25F;
+
+    final static boolean CALC_HEMMING_DISTANCE = true;
 
     final static String PRIMARY_SEQUENCE = Examples.SEQ300;
 
@@ -33,6 +34,7 @@ public class Main {
                 .hasPopulationAmountOf(POPULATION_AMOUNT)
                 .hasCrossoverRateOf(CROSSOVER_RATE)
                 .hasMutationRateOf(MUTATION_RATE)
+                .calculatesHemmingDistance(CALC_HEMMING_DISTANCE)
                 .generate();
 
 

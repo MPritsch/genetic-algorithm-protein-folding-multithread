@@ -1,10 +1,10 @@
 package algorithm;
 
 import algorithm.evaluation.FitnessCalculator;
-import lombok.Getter;
-import lombok.Setter;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -30,6 +30,8 @@ public class Population {
     private float averageFitness;
     private float averageNeighborCounter;
     private float averageOverlapCounter;
+    private float totalHemmingDistance;
+    private float averageHemmingDistance;
 
     DefaultCategoryDataset lineChartDataset;
 
@@ -70,6 +72,7 @@ public class Population {
         totalFitness = 0;
         int totalNeighborCounter = 0;
         int totalOverlapCounter = 0;
+        totalHemmingDistance = 0;
         Structure currentBestProtein = structures.get(0);
 
         for (Structure structure : structures) {
@@ -77,14 +80,16 @@ public class Population {
             totalFitness += fitness;
             totalNeighborCounter += structure.getValidNeighborCount();
             totalOverlapCounter += structure.getOverlappCounter();
+            totalHemmingDistance += structure.getAverageHemmingDistance();
             if (fitness > currentBestProtein.getFitness()) {
                 currentBestProtein = structure;
             }
         }
 
-        averageFitness = (float) totalFitness / (float) structures.size();
+        averageFitness = totalFitness / (float) structures.size();
         averageNeighborCounter = (float) totalNeighborCounter / (float) structures.size();
         averageOverlapCounter = (float) totalOverlapCounter / (float) structures.size();
+        averageHemmingDistance = totalHemmingDistance / (float) structures.size();
 
         return currentBestProtein;
     }
@@ -101,13 +106,15 @@ public class Population {
         System.out.println("  Average Fitness " + averageFitness);
         System.out.println("  Average neighbor count: " + averageNeighborCounter);
         System.out.println("  Average overlap count: " + averageOverlapCounter);
+        System.out.println("  Total Hemming distance: " + totalHemmingDistance);
+        System.out.println("  Average Hemming distance: " + averageHemmingDistance);
         System.out.println("  Best overall: Fitness: " + bestProtein.getFitness());
         System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
         System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
         System.out.println("  Best overall: Valid neighbor count: " + bestProtein.getValidNeighborCount());
         System.out.println("  Best in generation: fitness: " + currentBestProtein.getFitness());
-        System.out.println("  Best in generation: neighbor count: " + currentBestProtein.getNeighborCounter());
         System.out.println("  Best in generation: Overlaps " + currentBestProtein.getOverlappCounter());
+        System.out.println("  Best in generation: Neighbor count: " + currentBestProtein.getNeighborCounter());
         System.out.println("  Best in generation: Valid neighbor count: " + currentBestProtein.getValidNeighborCount());
     }
 
@@ -116,6 +123,7 @@ public class Population {
         lineChartDataset.addValue(averageFitness, "average fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(bestProtein.getFitness(), "best overall fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(currentBestProtein.getFitness(), "best fitness in generation", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(averageHemmingDistance, "average hemming", String.valueOf(currentGeneration));
     }
 
     public void buildSelectionOnGenepool() {
@@ -153,5 +161,45 @@ public class Population {
 
     public void evaluate(String primarySequence) {
         new FitnessCalculator(primarySequence).calculateFitnessOfPopulation(this);
+    }
+
+    public void calculateHemmingDistance(boolean hemmingDistance) { //todo move/refactor
+        if (hemmingDistance) {
+            for (int i = 0; i < structures.size() - 1; i++) {
+                Structure firstStructure = structures.get(i);
+
+                for (int j = i + 1; j < structures.size(); j++) {
+                    Structure secondStructure = structures.get(j);
+
+                    int hemmingDistanceOfStructures = calculateHemmingDistanceForStrucuture(firstStructure, secondStructure);
+                    firstStructure.addToTotalHemmingDistance(hemmingDistanceOfStructures);
+                    secondStructure.addToTotalHemmingDistance(hemmingDistanceOfStructures);
+                }
+
+            }
+
+            for (Structure structure : structures) {
+                structure.calculateAverageHemmingDistance(structures.size());
+            }
+        }
+    }
+
+    private int calculateHemmingDistanceForStrucuture(Structure firstStructure, Structure secondStructure) {
+        int hemmingDistance = 0;
+
+        for (int i = 0; i < firstStructure.getRelativeDirections().size(); i++) {
+            RelativeDirection firstDirection = firstStructure.getRelativeDirections().get(i);
+            RelativeDirection secondDirection = secondStructure.getRelativeDirections().get(i);
+
+            if (areDirectionsDifferent(firstDirection, secondDirection)) {
+                hemmingDistance++;
+            }
+        }
+
+        return hemmingDistance;
+    }
+
+    private boolean areDirectionsDifferent(RelativeDirection firstDirection, RelativeDirection secondDirection) {
+        return !firstDirection.equals(secondDirection);
     }
 }

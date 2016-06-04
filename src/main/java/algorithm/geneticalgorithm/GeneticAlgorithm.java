@@ -18,6 +18,10 @@ public abstract class GeneticAlgorithm {
     protected float mutationRate;
     protected float crossoverRate;
 
+    protected boolean calculateHemmingDistance;
+
+    protected int currentGeneration;
+
     public GeneticAlgorithm usesPrimarySequence(String primarySequence) {
         this.primarySequence = primarySequence;
         return this;
@@ -38,6 +42,11 @@ public abstract class GeneticAlgorithm {
         return this;
     }
 
+    public GeneticAlgorithm calculatesHemmingDistance(boolean hammingDistance) {
+        this.calculateHemmingDistance = hammingDistance;
+        return this;
+    }
+
     public Population generate() {
         setupStart();
 
@@ -46,15 +55,32 @@ public abstract class GeneticAlgorithm {
 
         population.evaluate(primarySequence);
 
-        int generation = 0;
+        this.currentGeneration = 0;
 
-        population.saveResults(generation);
+        population.calculateHemmingDistance(calculateHemmingDistance);
+        population.saveResults(currentGeneration);
 
         GraphicOutput frame = new GraphicOutput();
         frame.setProtein(population.getBestProtein());
         frame.repaint();
 
         return generateTillLimit(population, frame);
+    }
+
+    protected void performAlgorithm(Population population, GraphicOutput frame) {
+        currentGeneration++;
+
+        population.buildSelectionOnGenepool(); //selection
+        population.crossover(crossoverRate);
+        population.mutate(mutationRate);
+
+        population.evaluate(primarySequence);
+
+        population.calculateHemmingDistance(calculateHemmingDistance);
+        population.saveResults(currentGeneration);
+
+        frame.setProtein(population.getBestProtein());
+        frame.repaint();
     }
 
     protected abstract void setupStart();
