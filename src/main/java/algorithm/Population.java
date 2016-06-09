@@ -1,7 +1,7 @@
 package algorithm;
 
 import algorithm.evaluation.FitnessCalculator;
-import algorithm.evaluation.counter.HemmingDistanceCounter;
+import algorithm.evaluation.counter.HammingDistanceCounter;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
 import lombok.Getter;
@@ -31,8 +31,8 @@ public class Population {
     private float averageFitness;
     private float averageNeighborCounter;
     private float averageOverlapCounter;
-    private float totalHemmingDistance;
-    private float averageHemmingDistance;
+    private float totalHammingDistance;
+    private float averageHammingDistance;
 
     DefaultCategoryDataset lineChartDataset;
 
@@ -73,7 +73,7 @@ public class Population {
         totalFitness = 0;
         int totalNeighborCounter = 0;
         int totalOverlapCounter = 0;
-        totalHemmingDistance = 0;
+        totalHammingDistance = 0;
         Structure currentBestProtein = structures.get(0);
 
         for (Structure structure : structures) {
@@ -81,7 +81,7 @@ public class Population {
             totalFitness += fitness;
             totalNeighborCounter += structure.getValidNeighborCount();
             totalOverlapCounter += structure.getOverlappCounter();
-            totalHemmingDistance += structure.getAverageHemmingDistance();
+            totalHammingDistance += structure.getAverageHammingDistance();
             if (fitness > currentBestProtein.getFitness()) {
                 currentBestProtein = structure;
             }
@@ -90,7 +90,7 @@ public class Population {
         averageFitness = totalFitness / (float) structures.size();
         averageNeighborCounter = (float) totalNeighborCounter / (float) structures.size();
         averageOverlapCounter = (float) totalOverlapCounter / (float) structures.size();
-        averageHemmingDistance = totalHemmingDistance / (float) structures.size();
+        averageHammingDistance = totalHammingDistance / (float) structures.size();
 
         return currentBestProtein;
     }
@@ -107,8 +107,8 @@ public class Population {
         System.out.println("  Average Fitness " + averageFitness);
         System.out.println("  Average neighbor count: " + averageNeighborCounter);
         System.out.println("  Average overlap count: " + averageOverlapCounter);
-        System.out.println("  Total Hemming distance: " + totalHemmingDistance);
-        System.out.println("  Average Hemming distance: " + averageHemmingDistance);
+        System.out.println("  Total Hamming distance: " + totalHammingDistance);
+        System.out.println("  Average Hamming distance: " + averageHammingDistance);
         System.out.println("  Best overall: Fitness: " + bestProtein.getFitness());
         System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
 //        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
@@ -124,7 +124,7 @@ public class Population {
         lineChartDataset.addValue(averageFitness, "average fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(bestProtein.getFitness(), "best overall fitness", String.valueOf(currentGeneration));
         lineChartDataset.addValue(currentBestProtein.getFitness(), "best fitness in generation", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(averageHemmingDistance, "average hemming", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(averageHammingDistance, "average hamming", String.valueOf(currentGeneration));
     }
 
     public void buildSelectionOnGenepool() {
@@ -164,9 +164,9 @@ public class Population {
         new FitnessCalculator(primarySequence).calculateFitnessOfPopulation(this);
     }
 
-    public List<Structure> calculateHemmingDistance(boolean calcHemmingDistance) {
-        HemmingDistanceCounter hemmingDistanceCounter = new HemmingDistanceCounter();
-        structures = hemmingDistanceCounter.calculateHemmingDistance(calcHemmingDistance, structures);
+    public List<Structure> calculateHammingDistance(boolean calcHammingDistance) {
+        HammingDistanceCounter hammingDistanceCounter = new HammingDistanceCounter();
+        structures = hammingDistanceCounter.calculateHammingDistance(calcHammingDistance, structures);
         return structures;
     }
 }

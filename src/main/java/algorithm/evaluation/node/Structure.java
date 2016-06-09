@@ -17,8 +17,8 @@ public class Structure {
     private int overlappCounter = 0;
     private int neighborCounter = 0;
     private int directNeighborCounter = 0;
-    private float totalHemmingDistance = 0;
-    private float averageHemmingDistance = 0;
+    private float totalHammingDistance = 0;
+    private float averageHammingDistance = 0;
     private float fitness = 0;
 
     private Node startNode;
@@ -34,11 +34,13 @@ public class Structure {
         return neighborCounter - directNeighborCounter;
     }
 
-    public void addToTotalHemmingDistance(int hemmingDistanceAmount) {
-        totalHemmingDistance += hemmingDistanceAmount;
+    public void addToTotalHammingDistance(int hammingDistanceAmount) {
+        totalHammingDistance += hammingDistanceAmount;
     }
 
-    public void calculateAverageHemmingDistance(int populationAmount) {
-        averageHemmingDistance = totalHemmingDistance / (float) populationAmount;
+    public void calculateAverageHammingDistance(int populationAmount) {
+        if (populationAmount > 1) {
+            averageHammingDistance = totalHammingDistance / ((float) populationAmount - 1);
+        }
     }
 }

@@ -35,7 +35,7 @@ public class Main {
                 .hasPopulationAmountOf(POPULATION_AMOUNT)
                 .hasCrossoverRateOf(CROSSOVER_RATE)
                 .hasMutationRateOf(MUTATION_RATE)
-                .calculatesHemmingDistance(CALC_HEMMING_DISTANCE)
+                .calculatesHammingDistance(CALC_HEMMING_DISTANCE)
                 .generate();
 
 

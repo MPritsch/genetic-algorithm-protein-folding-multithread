@@ -20,7 +20,7 @@ public abstract class GeneticAlgorithm {
     protected float mutationRate;
     protected float crossoverRate;
 
-    protected boolean calculateHemmingDistance;
+    protected boolean calculateHammingDistance;
 
     protected int currentGeneration;
 
@@ -46,8 +46,8 @@ public abstract class GeneticAlgorithm {
         return this;
     }
 
-    public GeneticAlgorithm calculatesHemmingDistance(boolean hammingDistance) {
-        this.calculateHemmingDistance = hammingDistance;
+    public GeneticAlgorithm calculatesHammingDistance(boolean hammingDistance) {
+        this.calculateHammingDistance = hammingDistance;
         return this;
     }
 
@@ -61,7 +61,7 @@ public abstract class GeneticAlgorithm {
 
         this.currentGeneration = 0;
 
-        population.calculateHemmingDistance(calculateHemmingDistance);
+        population.calculateHammingDistance(calculateHammingDistance);
         population.saveResults(currentGeneration);
 
         initializeFrame();
@@ -86,7 +86,7 @@ public abstract class GeneticAlgorithm {
 
         population.evaluate(primarySequence);
 
-        population.calculateHemmingDistance(calculateHemmingDistance);
+        population.calculateHammingDistance(calculateHammingDistance);
         population.saveResults(currentGeneration);
 
         paint(population);
