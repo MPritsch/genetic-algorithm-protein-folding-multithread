@@ -80,8 +80,6 @@ public abstract class GeneticAlgorithm {
     }
 
     protected void performAlgorithm(Population population) {
-        currentGeneration++;
-
         population.buildSelectionOnGenepool(); //selection
         population.crossover(crossoverRate);
         population.mutate(mutationRate);

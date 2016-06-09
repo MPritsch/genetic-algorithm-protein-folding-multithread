@@ -1,6 +1,7 @@
 package algorithm;
 
 import algorithm.evaluation.FitnessCalculator;
+import algorithm.evaluation.counter.HemmingDistanceCounter;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
 import lombok.Getter;
@@ -163,43 +164,9 @@ public class Population {
         new FitnessCalculator(primarySequence).calculateFitnessOfPopulation(this);
     }
 
-    public void calculateHemmingDistance(boolean hemmingDistance) { //todo move/refactor
-        if (hemmingDistance) {
-            for (int i = 0; i < structures.size() - 1; i++) {
-                Structure firstStructure = structures.get(i);
-
-                for (int j = i + 1; j < structures.size(); j++) {
-                    Structure secondStructure = structures.get(j);
-
-                    int hemmingDistanceOfStructures = calculateHemmingDistanceForStrucuture(firstStructure, secondStructure);
-                    firstStructure.addToTotalHemmingDistance(hemmingDistanceOfStructures);
-                    secondStructure.addToTotalHemmingDistance(hemmingDistanceOfStructures);
-                }
-
-            }
-
-            for (Structure structure : structures) {
-                structure.calculateAverageHemmingDistance(structures.size());
-            }
-        }
-    }
-
-    private int calculateHemmingDistanceForStrucuture(Structure firstStructure, Structure secondStructure) {
-        int hemmingDistance = 0;
-
-        for (int i = 0; i < firstStructure.getRelativeDirections().size(); i++) {
-            RelativeDirection firstDirection = firstStructure.getRelativeDirections().get(i);
-            RelativeDirection secondDirection = secondStructure.getRelativeDirections().get(i);
-
-            if (areDirectionsDifferent(firstDirection, secondDirection)) {
-                hemmingDistance++;
-            }
-        }
-
-        return hemmingDistance;
-    }
-
-    private boolean areDirectionsDifferent(RelativeDirection firstDirection, RelativeDirection secondDirection) {
-        return !firstDirection.equals(secondDirection);
+    public List<Structure> calculateHemmingDistance(boolean calcHemmingDistance) {
+        HemmingDistanceCounter hemmingDistanceCounter = new HemmingDistanceCounter();
+        structures = hemmingDistanceCounter.calculateHemmingDistance(calcHemmingDistance, structures);
+        return structures;
     }
 }

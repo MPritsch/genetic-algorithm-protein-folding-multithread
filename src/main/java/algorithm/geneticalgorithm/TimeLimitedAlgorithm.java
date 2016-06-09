@@ -26,6 +26,8 @@ public class TimeLimitedAlgorithm extends GeneticAlgorithm{
     @Override
     protected Population generateTillLimit(Population population){
         while (!isOver()) {
+            currentGeneration++;
+
             performAlgorithm(population);
         }
 
