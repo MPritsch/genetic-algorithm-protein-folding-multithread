@@ -22,14 +22,13 @@ public class FoldingAnalyzer {
             analyzeFolding(structure);
 
             int selectivePressure = 3;
-//            double ratio = 0.6F;
-            double bonus = ((double) 1 + (double) structure.getValidNeighborCount()); // * ratio;
-            double malus = ((double) 1 + (double) structure.getOverlappCounter()); // * ((double) 1 - ratio);
+            double bonus = ((double) 1 + (double) structure.getValidNeighborCount());
+            double malus = ((double) 1 + (double) structure.getOverlappCounter());
             double expMalus = (double) Math.pow(malus, 3);
 
-            double totalFitness = 0;
-            totalFitness = bonus / expMalus;
-            return Math.pow(totalFitness, selectivePressure);
+            double totalFitness = bonus / expMalus;
+            totalFitness = Math.pow(totalFitness, selectivePressure);
+            return totalFitness;
         }
         return 0F;
     }

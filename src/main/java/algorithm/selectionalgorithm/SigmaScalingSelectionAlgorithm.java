@@ -18,16 +18,12 @@ public class SigmaScalingSelectionAlgorithm implements SelectionAlgorithm {
     private final double c = 2;
 
     public void selectOnPopulation(Population population) {
-        //calc avrg
-        //calc varianz
-        //calc sigma/standardabweichung
 
         double totalAbsoluteFitness = 0.0;
 
         List<Structure> structures = population.getStructures();
 
         for (Structure structure : structures) {
-//            structure.setAbsoluteFitness(structure.getAbsoluteFitness()+1);
             totalAbsoluteFitness += structure.getAbsoluteFitness();
         }
 
@@ -48,25 +44,25 @@ public class SigmaScalingSelectionAlgorithm implements SelectionAlgorithm {
 
         double standardDeviation = Math.sqrt(variance);
 
+        double totalRelativeFitness = 0.0;
 
         //absoluteFitness function for each
 //        for (Structure structure : structures) {
 //            double absoluteFitness = structure.getAbsoluteFitness();
 //
 //
-//
 //            double wert3 = c * standardDeviation;
 //            double wert4 = absoluteFitness - wert3;
 //
-//            if(wert4 > 0){
-//                structure.setAbsoluteFitness(wert4);
+//            if(wert4 > 0.00000000000001){
+//                structure.setRelativeFitness(wert4);
 //            } else{
-//                structure.setAbsoluteFitness(0.00001);
+//                structure.setRelativeFitness(0.00000000000001);
 //            }
+//
+//            totalRelativeFitness += structure.getRelativeFitness();
 //        }
 
-
-        double totalRelativeFitness = 0.0;
 
         for (Structure structure : structures) {
             double fitness = structure.getAbsoluteFitness();
@@ -78,10 +74,10 @@ public class SigmaScalingSelectionAlgorithm implements SelectionAlgorithm {
 
             double expVal = wert5 + 1;
 
-            if(expVal > 0.1){
+            if(expVal > 0.000000000000001){
                 structure.setRelativeFitness(expVal);
             } else{
-                structure.setRelativeFitness(0.0001);
+                structure.setRelativeFitness(0.000000000000001);
             }
 
             totalRelativeFitness += structure.getRelativeFitness();
