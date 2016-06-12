@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.evaluation;
 
 /**
  * Created by marcus on 08.05.16.

@@ -1,4 +1,4 @@
-import algorithm.CrossoverAlgorithm;
+import algorithm.crossover.CrossoverAlgorithm;
 import algorithm.evaluation.direction.RelativeDirection;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.mutation;
 
 import algorithm.evaluation.direction.RelativeDirection;
 

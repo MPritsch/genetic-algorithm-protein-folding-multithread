@@ -17,18 +17,19 @@ public class FoldingAnalyzer {
         directNeighborCount = 0;
     }
 
-    public float calculateTotalFitness(Structure structure) {
+    public double calculateTotalFitness(Structure structure) {
         if (structure.isValid()) {
             analyzeFolding(structure);
 
-            float ratio = 0.6F;
-            float bonus = ((float) 1 + (float) structure.getValidNeighborCount()) * ratio;
-            float malus = ((float) 1 + (float) structure.getOverlappCounter()) * ((float) 1 - ratio);
-            float expMalus = (float) Math.pow(malus, 3);
+            int selectivePressure = 3;
+//            double ratio = 0.6F;
+            double bonus = ((double) 1 + (double) structure.getValidNeighborCount()); // * ratio;
+            double malus = ((double) 1 + (double) structure.getOverlappCounter()); // * ((double) 1 - ratio);
+            double expMalus = (double) Math.pow(malus, 3);
 
-            float totalFitness = 0;
+            double totalFitness = 0;
             totalFitness = bonus / expMalus;
-            return totalFitness;
+            return Math.pow(totalFitness, selectivePressure);
         }
         return 0F;
     }
@@ -46,6 +47,6 @@ public class FoldingAnalyzer {
     }
 
     public int countDirectNeighbors(Structure structure) {
-        return new DirectHydrophobNeighborsCounter().countDirectNeighbors(structure.getStartNode());
+        return new DirectHydrophobNeighborsCounter().countDirectNeighbors(structure.getStartNode(), structure.getNodes());
     }
 }

@@ -17,9 +17,10 @@ public class Structure {
     private int overlappCounter = 0;
     private int neighborCounter = 0;
     private int directNeighborCounter = 0;
-    private float totalHammingDistance = 0;
-    private float averageHammingDistance = 0;
-    private float fitness = 0;
+    private double totalHammingDistance = 0;
+    private double averageHammingDistance = 0;
+    private double absoluteFitness = 0;
+    private double relativeFitness = 0;
 
     private Node startNode;
     private Node[][] nodes;

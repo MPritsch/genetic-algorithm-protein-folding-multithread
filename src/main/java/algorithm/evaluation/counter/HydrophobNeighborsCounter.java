@@ -1,6 +1,6 @@
 package algorithm.evaluation.counter;
 
-import algorithm.Torus;
+import algorithm.evaluation.Torus;
 import algorithm.evaluation.node.Node;
 
 /**

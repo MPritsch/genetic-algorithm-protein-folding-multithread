@@ -136,24 +136,24 @@ public class HammingDistanceCounterTest {
 
         for (Structure structure : structures) {
             if (directions1.equals(structure.getRelativeDirections()) || directions2.equals(structure.getRelativeDirections())) {
-                float expectedTotal = 4 + 4 + 3;
-                float expectedAverage = expectedTotal / 3;
+                double expectedTotal = 4 + 4 + 3;
+                double expectedAverage = expectedTotal / 3;
 
                 assertEquals(expectedAverage, structure.getAverageHammingDistance(), 0.0);
                 assertEquals(expectedTotal, structure.getTotalHammingDistance(), 0.0);
             }
 
             if (directions3.equals(structure.getRelativeDirections())) {
-                float expectedTotal = 4 + 4 + 2;
-                float expectedAverage = expectedTotal / 3;
+                double expectedTotal = 4 + 4 + 2;
+                double expectedAverage = expectedTotal / 3;
 
                 assertEquals(expectedAverage, structure.getAverageHammingDistance(), 0.0);
                 assertEquals(expectedTotal, structure.getTotalHammingDistance(), 0.0);
             }
 
             if (directions4.equals(structure.getRelativeDirections())) {
-                float expectedTotal = 3 + 3 + 2;
-                float expectedAverage = expectedTotal / 3;
+                double expectedTotal = 3 + 3 + 2;
+                double expectedAverage = expectedTotal / 3;
 
                 assertEquals(expectedAverage, structure.getAverageHammingDistance(), 0.0);
                 assertEquals(expectedTotal, structure.getTotalHammingDistance(), 0.0);

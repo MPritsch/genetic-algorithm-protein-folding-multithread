@@ -1,19 +1,18 @@
 package algorithm;
 
+import algorithm.crossover.CrossoverAlgorithm;
 import algorithm.evaluation.FitnessCalculator;
 import algorithm.evaluation.counter.HammingDistanceCounter;
 import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
+import algorithm.mutation.MutationAlgorithm;
+import algorithm.selectionalgorithm.SelectionAlgorithm;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.math3.distribution.EnumeratedDistribution;
-import org.apache.commons.math3.util.Pair;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by marcus on 07.05.16.
@@ -27,14 +26,17 @@ public class Population {
     private List<Structure> structures;
     private Structure bestProtein;
 
-    private float totalFitness;
-    private float averageFitness;
-    private float averageNeighborCounter;
-    private float averageOverlapCounter;
-    private float totalHammingDistance;
-    private float averageHammingDistance;
+    private double totalAbsoluteFitness;
+    private double averageAbsoluteFitness;
+    private double totalRelativeFitness;
+    private double averageRelativeFitness;
+    private double averageNeighborCounter;
+    private double averageOverlapCounter;
+    private double totalHammingDistance;
+    private double averageHammingDistance;
 
-    DefaultCategoryDataset lineChartDataset;
+    private DefaultCategoryDataset lineChartDataset;
+    private SelectionAlgorithm selectionAlgorithm;
 
     public Population(int populationSize) {
         genepool = new ArrayList<>(populationSize);
@@ -60,8 +62,8 @@ public class Population {
     }
 
     private void checkForNewBestProtein(Structure currentBestProtein) {
-        if (currentBestProtein.getFitness() > 0) {
-            if (currentBestProtein.getFitness() > bestProtein.getFitness()) {
+        if (currentBestProtein.getAbsoluteFitness() > 0) {
+            if (currentBestProtein.getAbsoluteFitness() > bestProtein.getAbsoluteFitness()) {
                 bestProtein = currentBestProtein;
             }
         } else {
@@ -70,27 +72,27 @@ public class Population {
     }
 
     private Structure calculateStatisticAndGetCurrentBestProtein() {
-        totalFitness = 0;
+        totalAbsoluteFitness = 0;
         int totalNeighborCounter = 0;
         int totalOverlapCounter = 0;
         totalHammingDistance = 0;
         Structure currentBestProtein = structures.get(0);
 
         for (Structure structure : structures) {
-            float fitness = structure.getFitness();
-            totalFitness += fitness;
+            double fitness = structure.getAbsoluteFitness();
+            totalAbsoluteFitness += fitness;
             totalNeighborCounter += structure.getValidNeighborCount();
             totalOverlapCounter += structure.getOverlappCounter();
             totalHammingDistance += structure.getAverageHammingDistance();
-            if (fitness > currentBestProtein.getFitness()) {
+            if (fitness > currentBestProtein.getAbsoluteFitness()) {
                 currentBestProtein = structure;
             }
         }
 
-        averageFitness = totalFitness / (float) structures.size();
-        averageNeighborCounter = (float) totalNeighborCounter / (float) structures.size();
-        averageOverlapCounter = (float) totalOverlapCounter / (float) structures.size();
-        averageHammingDistance = totalHammingDistance / (float) structures.size();
+        averageAbsoluteFitness = totalAbsoluteFitness / (double) structures.size();
+        averageNeighborCounter = (double) totalNeighborCounter / (double) structures.size();
+        averageOverlapCounter = (double) totalOverlapCounter / (double) structures.size();
+        averageHammingDistance = totalHammingDistance / (double) structures.size();
 
         return currentBestProtein;
     }
@@ -103,51 +105,32 @@ public class Population {
 
     private void printStatusOfCurrentGeneration(int currentGeneration, Structure currentBestProtein) {
         System.out.println("Generation " + currentGeneration + ":");
-        System.out.println("  Total Fitness: " + totalFitness);
-        System.out.println("  Average Fitness " + averageFitness);
+        System.out.println("  Total Fitness: " + totalAbsoluteFitness);
+        System.out.println("  Average Fitness " + averageAbsoluteFitness);
         System.out.println("  Average neighbor count: " + averageNeighborCounter);
         System.out.println("  Average overlap count: " + averageOverlapCounter);
         System.out.println("  Total Hamming distance: " + totalHammingDistance);
         System.out.println("  Average Hamming distance: " + averageHammingDistance);
-        System.out.println("  Best overall: Fitness: " + bestProtein.getFitness());
+        System.out.println("  Best overall: Fitness: " + bestProtein.getAbsoluteFitness());
         System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
 //        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
         System.out.println("  Best overall: Valid neighbor count: " + bestProtein.getValidNeighborCount());
-        System.out.println("  Best in generation: fitness: " + currentBestProtein.getFitness());
+        System.out.println("  Best in generation: absoluteFitness: " + currentBestProtein.getAbsoluteFitness());
         System.out.println("  Best in generation: Overlaps " + currentBestProtein.getOverlappCounter());
 //        System.out.println("  Best in generation: Neighbor count: " + currentBestProtein.getNeighborCounter());
         System.out.println("  Best in generation: Valid neighbor count: " + currentBestProtein.getValidNeighborCount());
     }
 
     private void saveValuesForChart(int currentGeneration, Structure currentBestProtein) {
-        //        lineChartDataset.addValue(totalFitness, "total fitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(averageFitness, "average fitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(bestProtein.getFitness(), "best overall fitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(currentBestProtein.getFitness(), "best fitness in generation", String.valueOf(currentGeneration));
+        //        lineChartDataset.addValue(totalAbsoluteFitness, "total absoluteFitness", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(averageAbsoluteFitness, "average absoluteFitness", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(bestProtein.getAbsoluteFitness(), "best overall absoluteFitness", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(currentBestProtein.getAbsoluteFitness(), "best absoluteFitness in generation", String.valueOf(currentGeneration));
         lineChartDataset.addValue(averageHammingDistance, "average hamming", String.valueOf(currentGeneration));
     }
 
-    public void buildSelectionOnGenepool() {
-        List<Pair> weightedStructures = buildWeightedStructures();
-
-        List<Structure> selection = pickWeightedStructuresRandomly(weightedStructures);
-
-        genepool.clear();
-        for (Structure structure : selection) {
-            genepool.add(structure.getRelativeDirections());
-        }
-    }
-
-    private List<Pair> buildWeightedStructures() {
-        return structures.stream().map(i -> new Pair(i, (double) i.getFitness() / (double) totalFitness)).collect(Collectors.toList());
-    }
-
-    private List<Structure> pickWeightedStructuresRandomly(List<Pair> weightedStructures) {
-        Object[] randomSelection = new EnumeratedDistribution(weightedStructures).sample(weightedStructures.size());
-
-        List<Structure> selection = Arrays.asList(Arrays.copyOf(randomSelection, randomSelection.length, Structure[].class));
-
-        return selection;
+    public void select() {
+        selectionAlgorithm.selectOnPopulation(this);
     }
 
     public void crossover(float crossoverRate) {
@@ -168,5 +151,9 @@ public class Population {
         HammingDistanceCounter hammingDistanceCounter = new HammingDistanceCounter();
         structures = hammingDistanceCounter.calculateHammingDistance(calcHammingDistance, structures);
         return structures;
+    }
+
+    public void usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm){
+        this.selectionAlgorithm = selectionAlgorithm;
     }
 }

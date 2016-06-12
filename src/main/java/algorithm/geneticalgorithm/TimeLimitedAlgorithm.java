@@ -1,6 +1,5 @@
 package algorithm.geneticalgorithm;
 
-import algorithm.GraphicOutput;
 import algorithm.Population;
 
 import java.time.Instant;

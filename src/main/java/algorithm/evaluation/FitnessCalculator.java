@@ -33,9 +33,9 @@ public class FitnessCalculator {
     private Structure buildStructureWithFitness(List<RelativeDirection> relativeDirections) {
         Structure structure = foldingStructureBuilder.buildStructure(relativeDirections);
 
-        float fitness = foldingAnalyzer.calculateTotalFitness(structure);
+        double fitness = foldingAnalyzer.calculateTotalFitness(structure);
 
-        structure.setFitness(fitness);
+        structure.setAbsoluteFitness(fitness);
 
         return structure;
     }

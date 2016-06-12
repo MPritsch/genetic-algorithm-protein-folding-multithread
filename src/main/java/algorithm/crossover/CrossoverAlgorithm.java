@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.crossover;
 
 import algorithm.evaluation.direction.RelativeDirection;
 
@@ -61,7 +61,7 @@ public class CrossoverAlgorithm {
         return crossoveredGenepool;
     }
 
-    private List<RelativeDirection> buildChildFromParents(List<RelativeDirection> firstHalf, List<RelativeDirection> secondHalf)  {
+    private List<RelativeDirection> buildChildFromParents(List<RelativeDirection> firstHalf, List<RelativeDirection> secondHalf) {
         List<RelativeDirection> child = new ArrayList<>();
         child.addAll(firstHalf);
         child.addAll(secondHalf);

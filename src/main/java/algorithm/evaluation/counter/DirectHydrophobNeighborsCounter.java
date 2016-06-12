@@ -7,7 +7,7 @@ import algorithm.evaluation.node.Node;
  */
 public class DirectHydrophobNeighborsCounter {
 
-    public static int countDirectNeighbors(Node startNode) {
+    public static int countDirectNeighbors(Node startNode, Node[][] nodes) {
         if (startNode == null) {
             return 0;
         }
@@ -18,7 +18,7 @@ public class DirectHydrophobNeighborsCounter {
         do {
             Node directNeighborNode = currentNode.getNext();
 
-            if (areHydrophobNeighbors(currentNode, directNeighborNode)) {
+            if (areDisplayedHydrophobNeighbors(nodes, currentNode, directNeighborNode)) {
                 directNeighborCount++;
             }
 
@@ -26,6 +26,19 @@ public class DirectHydrophobNeighborsCounter {
         } while (currentNode != null);
 
         return directNeighborCount;
+    }
+
+    private static boolean areDisplayedHydrophobNeighbors(Node[][] nodes, Node currentNode, Node directNeighborNode) {
+        return areHydrophobNeighbors(currentNode, directNeighborNode) && areDisplayed(nodes, currentNode, directNeighborNode);
+    }
+
+    //because of overriding in the nodes array, only the last on one position is displayed -> don't count underlying!
+    private static boolean areDisplayed(Node[][] nodes, Node currentNode, Node directNeighborNode) {
+        return isDisplayed(nodes, currentNode) && isDisplayed(nodes, directNeighborNode);
+    }
+
+    private static boolean isDisplayed(Node[][] nodes, Node node) {
+        return node == nodes[node.getPosition().getX()][node.getPosition().getY()];
     }
 
     private static boolean areHydrophobNeighbors(Node currentNode, Node directNeighborNode) {

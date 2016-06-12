@@ -1,11 +1,10 @@
 package algorithm.geneticalgorithm;
 
-import algorithm.GraphicOutput;
+import algorithm.output.GraphicOutput;
 import algorithm.Population;
 import algorithm.PopulationGenerator;
+import algorithm.selectionalgorithm.SelectionAlgorithm;
 import lombok.NoArgsConstructor;
-
-import javax.swing.*;
 
 /**
  * Created by marcus on 08.05.16.
@@ -25,6 +24,7 @@ public abstract class GeneticAlgorithm {
     protected int currentGeneration;
 
     private GraphicOutput frame;
+    private SelectionAlgorithm selectionAlgorithm;
 
     public GeneticAlgorithm usesPrimarySequence(String primarySequence) {
         this.primarySequence = primarySequence;
@@ -51,11 +51,17 @@ public abstract class GeneticAlgorithm {
         return this;
     }
 
+    public GeneticAlgorithm usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm){
+        this.selectionAlgorithm = selectionAlgorithm;
+        return this;
+    }
+
     public Population generate() {
         setupStart();
 
         PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
         Population population = populationGenerator.generateStartPopulation();
+        population.usesSelectionAlgorithm(selectionAlgorithm);
 
         population.evaluate(primarySequence);
 
@@ -80,7 +86,7 @@ public abstract class GeneticAlgorithm {
     }
 
     protected void performAlgorithm(Population population) {
-        population.buildSelectionOnGenepool(); //selection
+        population.select(); //selection
         population.crossover(crossoverRate);
         population.mutate(mutationRate);
 

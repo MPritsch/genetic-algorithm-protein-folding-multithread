@@ -1,4 +1,4 @@
-package algorithm;
+package algorithm.output;
 
 import algorithm.evaluation.node.Node;
 import algorithm.evaluation.node.Position;
@@ -125,15 +125,5 @@ public class GraphicOutput extends JFrame {
         lastPosition.setY(yPos);
 
         return lastPosition;
-    }
-
-    private Node[][] rotate(Node[][] nodes) {
-        Node[][] newNodes = new Node[nodes.length][nodes.length];
-        for (int i = 0; i < nodes.length; i++) {
-            for (int j = 0; j < nodes.length; j++) {
-                newNodes[i][j] = nodes[j][i];
-            }
-        }
-        return newNodes;
     }
 }
