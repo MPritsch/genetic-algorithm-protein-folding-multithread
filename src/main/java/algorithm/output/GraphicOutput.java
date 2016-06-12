@@ -1,5 +1,7 @@
 package algorithm.output;
 
+import algorithm.Population;
+import algorithm.PopulationStatistic;
 import algorithm.evaluation.node.Node;
 import algorithm.evaluation.node.Position;
 import algorithm.evaluation.node.Structure;
@@ -9,6 +11,7 @@ import lombok.Setter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.time.Instant;
 
 /**
  * Created by marcus on 17.05.16.
@@ -17,12 +20,16 @@ import java.awt.image.BufferStrategy;
 @Setter
 public class GraphicOutput extends JFrame {
 
-    private final int WIDTH = 900;
-    private final int HEIGHT = 900;
+    private final int PROTEIN_WIDTH = 900;
+    private final int PROTEIN_HEIGHT = 900;
+
+    private final int WIDTH = 1600;
+    private final int HEIGHT = 950;
 
     private final int TOTAL_MARGIN = 100;
     private final int MARGIN = 40;
 
+    private Population population;
     private Structure protein;
     private BufferStrategy bs;
 
@@ -38,17 +45,37 @@ public class GraphicOutput extends JFrame {
 
     @Override
     public void paint(Graphics g) {
-        //todo move further left (relocate??)
-        //get minimum and maximum of width and height -> substract minimum
-        //startidx - objectpos
-        while (bs == null) {
-            //todo fix concurrency problem...
-        }
-        Graphics2D g2 = (Graphics2D) bs.getDrawGraphics();
+//        while (bs == null) {
+//            //todo fix concurrency problem...
+//        }
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showAllComponents();
+            }
+        }).start();
+    }
+
+    private void showAllComponents() {
+        do {
+            Graphics2D g2 = null;
+            try {
+                g2 = (Graphics2D) bs.getDrawGraphics();
+                drawStuff(g2);
+            } finally {
+                g2.dispose();
+            }
+            bs.show();
+        } while (bs.contentsLost());
+    }
+
+    private void drawStuff(Graphics2D g2) {
         g2.clearRect(0, 0, WIDTH, HEIGHT);
 
         Position lastPosition = null;
+
+        this.protein = population.getBestProtein();
 
         if (protein.getNodes() != null) {
 
@@ -78,9 +105,9 @@ public class GraphicOutput extends JFrame {
             Integer scaling;
 
             if (maxWidth > maxHeight) {
-                scaling = (WIDTH - TOTAL_MARGIN) / (maxWidth);
+                scaling = (PROTEIN_WIDTH - TOTAL_MARGIN) / (maxWidth);
             } else {
-                scaling = (HEIGHT - TOTAL_MARGIN) / (maxHeight);
+                scaling = (PROTEIN_HEIGHT - TOTAL_MARGIN) / (maxHeight);
             }
 
             currentNode = protein.getStartNode();
@@ -92,7 +119,35 @@ public class GraphicOutput extends JFrame {
                 lastPosition = printNodeAndGetLastPosition(currentNode, g2, minX, minY, lastPosition, scaling);
             }
         }
-        bs.show();
+
+        showStatistics(g2);
+    }
+
+    private void showStatistics(Graphics2D g2) {
+
+        PopulationStatistic statistic = population.getStatistic();
+
+
+        g2.setColor(Color.RED);
+        g2.setFont(new Font("SansSerif", Font.BOLD, 17));
+        g2.drawString("Generation " + statistic.getGeneration() + ":",  950, 50);
+        g2.drawString("  Total Fitness: " + statistic.getTotalFitness(),  950, 75);
+        g2.drawString("  Average Fitness " + statistic.getAverageFitness(),  950, 100);
+        g2.drawString("  Average neighbor count: " + statistic.getAverageNeighborCounter(),  950, 125);
+        g2.drawString("  Average overlap count: " + statistic.getAverageOverlapCounter(),  950, 150);
+        g2.drawString("  Total Hamming distance: " + statistic.getTotalHammingDistance(),  950, 175);
+        g2.drawString("  Average Hamming distance: " + statistic.getAverageHammingDistance(),  950, 200);
+        g2.drawString("  Best overall: Fitness: " + statistic.getBestProtein().getAbsoluteFitness(),  950, 225);
+        g2.drawString("  Best overall: Overlaps " + statistic.getBestProtein().getOverlappCounter(),  950, 250);
+        g2.drawString("  Best overall: Valid neighbor count: " + statistic.getBestProtein().getValidNeighborCount(),  950, 275);
+        g2.drawString("  Best in generation: absoluteFitness: " + statistic.getBestProteinInGeneration().getAbsoluteFitness(),  950, 300);
+        g2.drawString("  Best in generation: Overlaps " + statistic.getBestProteinInGeneration().getOverlappCounter(),  950, 325);
+        g2.drawString("  Best in generation: Valid neighbor count: " + statistic.getBestProteinInGeneration().getValidNeighborCount(),  950, 350);
+
+
+        long timeElapsed = Instant.now().toEpochMilli() - population.getStartTime();
+        g2.setColor(Color.BLACK);
+        g2.drawString("Time taken: " + timeElapsed,  950, 500);
     }
 
     private Position printNodeAndGetLastPosition(Node currentNode, Graphics2D g2, Integer minX, Integer minY, Position lastPosition, Integer scaling) {

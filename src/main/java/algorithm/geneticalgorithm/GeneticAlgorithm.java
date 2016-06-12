@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class GeneticAlgorithm {
 
+    protected long startTime;
+    protected boolean documentsStatistic = false;
+
     protected String primarySequence;
 
     protected int populationAmount;
@@ -25,6 +28,16 @@ public abstract class GeneticAlgorithm {
 
     private GraphicOutput frame;
     private SelectionAlgorithm selectionAlgorithm;
+
+    public GeneticAlgorithm startedAt(long startTime) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    public GeneticAlgorithm documentsStatistic(boolean documentsStatistic) {
+        this.documentsStatistic = documentsStatistic;
+        return this;
+    }
 
     public GeneticAlgorithm usesPrimarySequence(String primarySequence) {
         this.primarySequence = primarySequence;
@@ -62,6 +75,8 @@ public abstract class GeneticAlgorithm {
         PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
         Population population = populationGenerator.generateStartPopulation();
         population.usesSelectionAlgorithm(selectionAlgorithm);
+        population.setStartTime(startTime);
+        population.setDocumentsStatistic(documentsStatistic);
 
         population.evaluate(primarySequence);
 
@@ -81,7 +96,7 @@ public abstract class GeneticAlgorithm {
     }
 
     private void paint(final Population population) {
-        frame.setProtein(population.getBestProtein());
+        frame.setPopulation(population);
         frame.repaint();
     }
 

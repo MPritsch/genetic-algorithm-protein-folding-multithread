@@ -12,7 +12,9 @@ import lombok.Setter;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by marcus on 07.05.16.
@@ -21,19 +23,18 @@ import java.util.List;
 @Setter
 public class Population {
 
+    private long startTime;
+    private boolean documentsStatistic;
+
     private List<List<RelativeDirection>> genepool;
 
     private List<Structure> structures;
     private Structure bestProtein;
 
-    private double totalAbsoluteFitness;
-    private double averageAbsoluteFitness;
     private double totalRelativeFitness;
     private double averageRelativeFitness;
-    private double averageNeighborCounter;
-    private double averageOverlapCounter;
-    private double totalHammingDistance;
-    private double averageHammingDistance;
+
+    private PopulationStatistic statistic;
 
     private DefaultCategoryDataset lineChartDataset;
     private SelectionAlgorithm selectionAlgorithm;
@@ -42,6 +43,7 @@ public class Population {
         genepool = new ArrayList<>(populationSize);
         structures = new ArrayList<>(populationSize);
         bestProtein = new Structure();
+        statistic = new PopulationStatistic();
 
         lineChartDataset = new DefaultCategoryDataset();
     }
@@ -58,6 +60,10 @@ public class Population {
         Structure currentBestProtein = calculateStatisticAndGetCurrentBestProtein();
 
         checkForNewBestProtein(currentBestProtein);
+
+        statistic.setGeneration(currentGeneration);
+        statistic.setBestProteinInGeneration(currentBestProtein);
+
         saveAndPrintResults(currentGeneration, currentBestProtein);
     }
 
@@ -67,66 +73,65 @@ public class Population {
                 bestProtein = currentBestProtein;
             }
         } else {
-            System.out.println("No valid structure was generated.");
+//            System.out.println("No valid structure was generated.");
         }
     }
 
     private Structure calculateStatisticAndGetCurrentBestProtein() {
-        totalAbsoluteFitness = 0;
-        int totalNeighborCounter = 0;
-        int totalOverlapCounter = 0;
-        totalHammingDistance = 0;
-        Structure currentBestProtein = structures.get(0);
+        double totalAbsoluteFitness = structures.stream().mapToDouble(Structure::getAbsoluteFitness).sum();
+        int totalNeighborCounter = structures.stream().mapToInt(Structure::getNeighborCounter).sum();
+        int totalOverlapCounter = structures.stream().mapToInt(Structure::getOverlappCounter).sum();
+        double totalHammingDistance = structures.stream().mapToDouble(Structure::getAverageHammingDistance).sum();
+        Optional<Structure> currentBestProtein = structures.stream().max(Comparator.comparing(Structure::getAbsoluteFitness));
 
-        for (Structure structure : structures) {
-            double fitness = structure.getAbsoluteFitness();
-            totalAbsoluteFitness += fitness;
-            totalNeighborCounter += structure.getValidNeighborCount();
-            totalOverlapCounter += structure.getOverlappCounter();
-            totalHammingDistance += structure.getAverageHammingDistance();
-            if (fitness > currentBestProtein.getAbsoluteFitness()) {
-                currentBestProtein = structure;
-            }
-        }
+        double averageAbsoluteFitness = totalAbsoluteFitness / (double) structures.size();
+        double averageNeighborCounter = (double) totalNeighborCounter / (double) structures.size();
+        double averageOverlapCounter = (double) totalOverlapCounter / (double) structures.size();
+        double averageHammingDistance = totalHammingDistance / (double) structures.size();
 
-        averageAbsoluteFitness = totalAbsoluteFitness / (double) structures.size();
-        averageNeighborCounter = (double) totalNeighborCounter / (double) structures.size();
-        averageOverlapCounter = (double) totalOverlapCounter / (double) structures.size();
-        averageHammingDistance = totalHammingDistance / (double) structures.size();
+        statistic.setTotalFitness(totalAbsoluteFitness);
+        statistic.setAverageFitness(averageAbsoluteFitness);
+        statistic.setAverageNeighborCounter(averageNeighborCounter);
+        statistic.setAverageOverlapCounter(averageOverlapCounter);
+        statistic.setTotalHammingDistance(totalHammingDistance);
+        statistic.setAverageHammingDistance(averageHammingDistance);
+        statistic.setBestProtein(bestProtein);
 
-        return currentBestProtein;
+        return currentBestProtein.orElse(null);
     }
 
     private void saveAndPrintResults(int currentGeneration, Structure currentBestProtein) {
-        printStatusOfCurrentGeneration(currentGeneration, currentBestProtein);
+        if (documentsStatistic) {
+            printStatusOfCurrentGeneration(currentGeneration, currentBestProtein);
+        }
 //        bestProtein.printStructure();
         saveValuesForChart(currentGeneration, currentBestProtein);
     }
 
     private void printStatusOfCurrentGeneration(int currentGeneration, Structure currentBestProtein) {
         System.out.println("Generation " + currentGeneration + ":");
-        System.out.println("  Total Fitness: " + totalAbsoluteFitness);
-        System.out.println("  Average Fitness " + averageAbsoluteFitness);
-        System.out.println("  Average neighbor count: " + averageNeighborCounter);
-        System.out.println("  Average overlap count: " + averageOverlapCounter);
-        System.out.println("  Total Hamming distance: " + totalHammingDistance);
-        System.out.println("  Average Hamming distance: " + averageHammingDistance);
-        System.out.println("  Best overall: Fitness: " + bestProtein.getAbsoluteFitness());
-        System.out.println("  Best overall: Overlaps " + bestProtein.getOverlappCounter());
+        System.out.println("  Total Fitness: " + statistic.getTotalFitness());
+        System.out.println("  Average Fitness " + statistic.getAverageFitness());
+        System.out.println("  Average neighbor count: " + statistic.getAverageNeighborCounter());
+        System.out.println("  Average overlap count: " + statistic.getAverageOverlapCounter());
+        System.out.println("  Total Hamming distance: " + statistic.getTotalHammingDistance());
+        System.out.println("  Average Hamming distance: " + statistic.getAverageHammingDistance());
+        System.out.println("  Best overall: Fitness: " + statistic.getBestProtein().getAbsoluteFitness());
+        System.out.println("  Best overall: Overlaps " + statistic.getBestProtein().getOverlappCounter());
 //        System.out.println("  Best overall: Neighbor count: " + bestProtein.getNeighborCounter());
-        System.out.println("  Best overall: Valid neighbor count: " + bestProtein.getValidNeighborCount());
-        System.out.println("  Best in generation: absoluteFitness: " + currentBestProtein.getAbsoluteFitness());
-        System.out.println("  Best in generation: Overlaps " + currentBestProtein.getOverlappCounter());
+        System.out.println("  Best overall: Valid neighbor count: " + statistic.getBestProtein().getValidNeighborCount());
+        System.out.println("  Best in generation: absoluteFitness: " + statistic.getBestProteinInGeneration().getAbsoluteFitness());
+        System.out.println("  Best in generation: Overlaps " + statistic.getBestProteinInGeneration().getOverlappCounter());
 //        System.out.println("  Best in generation: Neighbor count: " + currentBestProtein.getNeighborCounter());
-        System.out.println("  Best in generation: Valid neighbor count: " + currentBestProtein.getValidNeighborCount());
+        System.out.println("  Best in generation: Valid neighbor count: " + statistic.getBestProteinInGeneration().getValidNeighborCount());
     }
 
     private void saveValuesForChart(int currentGeneration, Structure currentBestProtein) {
         //        lineChartDataset.addValue(totalAbsoluteFitness, "total absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(averageAbsoluteFitness, "average absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(bestProtein.getAbsoluteFitness(), "best overall absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(currentBestProtein.getAbsoluteFitness(), "best absoluteFitness in generation", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(averageHammingDistance, "average hamming", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(statistic.getAverageFitness(), "average absoluteFitness", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(statistic.getBestProtein().getAbsoluteFitness(), "best overall absoluteFitness", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(statistic.getBestProteinInGeneration().getAbsoluteFitness(), "best absoluteFitness in generation", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(statistic.getAverageHammingDistance(), "average hamming", String.valueOf(currentGeneration));
     }
 
     public void select() {
@@ -153,7 +158,7 @@ public class Population {
         return structures;
     }
 
-    public void usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm){
+    public void usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
         this.selectionAlgorithm = selectionAlgorithm;
     }
 }

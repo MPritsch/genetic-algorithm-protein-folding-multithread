@@ -1,7 +1,6 @@
 package algorithm.selectionalgorithm;
 
 import algorithm.Population;
-import algorithm.evaluation.direction.RelativeDirection;
 import algorithm.evaluation.node.Structure;
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -29,8 +28,8 @@ public class SigmaScalingSelectionAlgorithm extends SelectionAlgorithm {
 
         double averageAbsoluteFitness = totalAbsoluteFitness / (double) structures.size();
 
-        population.setTotalAbsoluteFitness(totalAbsoluteFitness);
-        population.setAverageAbsoluteFitness(averageAbsoluteFitness);
+        population.getStatistic().setTotalFitness(totalAbsoluteFitness);
+        population.getStatistic().setAverageFitness(averageAbsoluteFitness);
 
         double wert = 0.0;
 

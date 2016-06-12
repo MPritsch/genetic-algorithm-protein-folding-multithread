@@ -12,7 +12,7 @@ import java.util.List;
 public class FitnessProportionalSelectionAlgorithm extends SelectionAlgorithm {
 
     public void selectOnPopulation(Population population) {
-        List<Pair> weightedStructures = buildWeightedStructures(population.getStructures(), population.getTotalAbsoluteFitness());
+        List<Pair> weightedStructures = buildWeightedStructures(population.getStructures(), population.getStatistic().getTotalFitness());
 
         List<Structure> selection = pickWeightedStructuresRandomly(weightedStructures, weightedStructures.size());
 

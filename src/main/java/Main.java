@@ -13,9 +13,12 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.io.File;
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
+
+    final static boolean DOCUMENTS_STATISTIC = false;
 
     final static int GENERATION_AMOUNT = 163;
     final static long TIME_LIMIT = 20000;
@@ -23,7 +26,7 @@ public class Main {
     final static float MUTATION_RATE = 0.02F;
     final static float CROSSOVER_RATE = 0.25F;
 
-    final static int CANDIDATE_AMOUNT_PER_SELECTION = 100;
+    final static int CANDIDATE_AMOUNT_PER_SELECTION = 200;
 
     final static boolean CALC_HEMMING_DISTANCE = false;
 
@@ -35,6 +38,8 @@ public class Main {
 //        GeneticAlgorithm geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT);
 
         Population population = geneticAlgorithm
+                .startedAt(Instant.now().toEpochMilli())
+                .documentsStatistic(DOCUMENTS_STATISTIC)
                 .usesPrimarySequence(PRIMARY_SEQUENCE)
                 .hasPopulationAmountOf(POPULATION_AMOUNT)
                 .hasCrossoverRateOf(CROSSOVER_RATE)
@@ -49,10 +54,6 @@ public class Main {
 
         System.out.println("Calculation took: " + s.elapsed(TimeUnit.MILLISECONDS));
         saveChart(population);
-
-//        GraphicOutput frame = new GraphicOutput();
-//        frame.setProtein(population.getBestProtein());
-//        frame.revalidate();
     }
 
     private static void saveChart(Population population) {
