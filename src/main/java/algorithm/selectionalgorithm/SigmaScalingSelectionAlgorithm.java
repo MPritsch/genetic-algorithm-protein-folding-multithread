@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Created by marcus on 09.06.16.
  */
-public class SigmaScalingSelectionAlgorithm implements SelectionAlgorithm {
+public class SigmaScalingSelectionAlgorithm extends SelectionAlgorithm {
 
     private final double c = 2;
 
@@ -95,24 +95,19 @@ public class SigmaScalingSelectionAlgorithm implements SelectionAlgorithm {
     private void selectFitnessProportional(Population population) {
         List<Pair> weightedStructures = buildWeightedStructures(population.getStructures(), population.getTotalRelativeFitness());
 
-        List<Structure> selection = pickWeightedStructuresRandomly(weightedStructures);
+        List<Structure> selection = pickWeightedStructuresRandomly(weightedStructures, weightedStructures.size());
 
-        List<List<RelativeDirection>> genepool = population.getGenepool();
-
-        genepool.clear();
-        for (Structure structure : selection) {
-            genepool.add(structure.getRelativeDirections());
-        }
-
-        population.setGenepool(genepool);
+        buildGenepoolOfSelection(population, selection);
     }
 
-    private List<Pair> buildWeightedStructures(List<Structure> structures, double totalRelativeFitness) {
+    @Override
+    protected List<Pair> buildWeightedStructures(List<Structure> structures, double totalRelativeFitness) {
         return structures.stream().map(i -> new Pair(i, i.getRelativeFitness() / totalRelativeFitness)).collect(Collectors.toList());
     }
 
-    private List<Structure> pickWeightedStructuresRandomly(List<Pair> weightedStructures) {
-        Object[] randomSelection = new EnumeratedDistribution(weightedStructures).sample(weightedStructures.size());
+    @Override
+    protected List<Structure> pickWeightedStructuresRandomly(List<Pair> weightedStructures, int amount) {
+        Object[] randomSelection = new EnumeratedDistribution(weightedStructures).sample(amount);
 
         List<Structure> selection = Arrays.asList(Arrays.copyOf(randomSelection, randomSelection.length, Structure[].class));
 

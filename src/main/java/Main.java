@@ -1,10 +1,10 @@
 import algorithm.geneticalgorithm.TimeLimitedAlgorithm;
-import algorithm.selectionalgorithm.FitnessProportionalSelectionAlgorithm;
-import algorithm.geneticalgorithm.GenerationLimitedAlgorithm;
 import algorithm.geneticalgorithm.GeneticAlgorithm;
 import algorithm.Population;
 import algorithm.examples.Examples;
-import algorithm.selectionalgorithm.SigmaScalingSelectionAlgorithm;
+import algorithm.selectionalgorithm.FitnessProportionalSelectionAlgorithm;
+import algorithm.selectionalgorithm.TunierBestFitnessSelectionAlgorithm;
+import algorithm.selectionalgorithm.TunierFitnessProportionalSelectionAlgorithm;
 import com.google.common.base.Stopwatch;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -23,6 +23,8 @@ public class Main {
     final static float MUTATION_RATE = 0.02F;
     final static float CROSSOVER_RATE = 0.25F;
 
+    final static int CANDIDATE_AMOUNT_PER_SELECTION = 100;
+
     final static boolean CALC_HEMMING_DISTANCE = false;
 
     final static String PRIMARY_SEQUENCE = Examples.SEQ300;
@@ -39,6 +41,8 @@ public class Main {
                 .hasMutationRateOf(MUTATION_RATE)
                 .calculatesHammingDistance(CALC_HEMMING_DISTANCE)
                 .usesSelectionAlgorithm(new FitnessProportionalSelectionAlgorithm())
+//                .usesSelectionAlgorithm(new TunierFitnessProportionalSelectionAlgorithm(CANDIDATE_AMOUNT_PER_SELECTION))
+//                .usesSelectionAlgorithm(new TunierBestFitnessSelectionAlgorithm(CANDIDATE_AMOUNT_PER_SELECTION))
 //                .usesSelectionAlgorithm(new SigmaScalingSelectionAlgorithm())
                 .generate();
 
