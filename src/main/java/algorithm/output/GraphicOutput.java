@@ -39,35 +39,30 @@ public class GraphicOutput extends JFrame {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
+        while (!this.isDisplayable()) ;
         this.createBufferStrategy(2);
-        bs = this.getBufferStrategy();
+        while (bs == null) {
+            bs = this.getBufferStrategy();
+        }
     }
 
     @Override
     public void paint(Graphics g) {
-//        while (bs == null) {
-//            //todo fix concurrency problem...
-//        }
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                showAllComponents();
-            }
-        }).start();
-    }
-
-    private void showAllComponents() {
         do {
+//            do {
             Graphics2D g2 = null;
             try {
                 g2 = (Graphics2D) bs.getDrawGraphics();
                 drawStuff(g2);
             } finally {
-                g2.dispose();
+                if (g2 != null) {
+                    g2.dispose();
+                }
             }
+//            } while (bs.contentsRestored());
             bs.show();
         } while (bs.contentsLost());
+
     }
 
     private void drawStuff(Graphics2D g2) {
@@ -130,24 +125,24 @@ public class GraphicOutput extends JFrame {
 
         g2.setColor(Color.RED);
         g2.setFont(new Font("SansSerif", Font.BOLD, 17));
-        g2.drawString("Generation " + statistic.getGeneration() + ":",  950, 50);
-        g2.drawString("  Total Fitness: " + statistic.getTotalFitness(),  950, 75);
-        g2.drawString("  Average Fitness " + statistic.getAverageFitness(),  950, 100);
-        g2.drawString("  Average neighbor count: " + statistic.getAverageNeighborCounter(),  950, 125);
-        g2.drawString("  Average overlap count: " + statistic.getAverageOverlapCounter(),  950, 150);
-        g2.drawString("  Total Hamming distance: " + statistic.getTotalHammingDistance(),  950, 175);
-        g2.drawString("  Average Hamming distance: " + statistic.getAverageHammingDistance(),  950, 200);
-        g2.drawString("  Best overall: Fitness: " + statistic.getBestProtein().getAbsoluteFitness(),  950, 225);
-        g2.drawString("  Best overall: Overlaps " + statistic.getBestProtein().getOverlappCounter(),  950, 250);
-        g2.drawString("  Best overall: Valid neighbor count: " + statistic.getBestProtein().getValidNeighborCount(),  950, 275);
-        g2.drawString("  Best in generation: absoluteFitness: " + statistic.getBestProteinInGeneration().getAbsoluteFitness(),  950, 300);
-        g2.drawString("  Best in generation: Overlaps " + statistic.getBestProteinInGeneration().getOverlappCounter(),  950, 325);
-        g2.drawString("  Best in generation: Valid neighbor count: " + statistic.getBestProteinInGeneration().getValidNeighborCount(),  950, 350);
+        g2.drawString("Generation " + statistic.getGeneration() + ":", 950, 50);
+        g2.drawString("  Total Fitness: " + statistic.getTotalFitness(), 950, 75);
+        g2.drawString("  Average Fitness " + statistic.getAverageFitness(), 950, 100);
+        g2.drawString("  Average neighbor count: " + statistic.getAverageNeighborCounter(), 950, 125);
+        g2.drawString("  Average overlap count: " + statistic.getAverageOverlapCounter(), 950, 150);
+        g2.drawString("  Total Hamming distance: " + statistic.getTotalHammingDistance(), 950, 175);
+        g2.drawString("  Average Hamming distance: " + statistic.getAverageHammingDistance(), 950, 200);
+        g2.drawString("  Best overall: Fitness: " + statistic.getBestProtein().getAbsoluteFitness(), 950, 225);
+        g2.drawString("  Best overall: Overlaps " + statistic.getBestProtein().getOverlappCounter(), 950, 250);
+        g2.drawString("  Best overall: Valid neighbor count: " + statistic.getBestProtein().getValidNeighborCount(), 950, 275);
+        g2.drawString("  Best in generation: absoluteFitness: " + statistic.getBestProteinInGeneration().getAbsoluteFitness(), 950, 300);
+        g2.drawString("  Best in generation: Overlaps " + statistic.getBestProteinInGeneration().getOverlappCounter(), 950, 325);
+        g2.drawString("  Best in generation: Valid neighbor count: " + statistic.getBestProteinInGeneration().getValidNeighborCount(), 950, 350);
 
 
         long timeElapsed = Instant.now().toEpochMilli() - population.getStartTime();
         g2.setColor(Color.BLACK);
-        g2.drawString("Time taken: " + timeElapsed,  950, 500);
+        g2.drawString("Time taken: " + timeElapsed, 950, 500);
     }
 
     private Position printNodeAndGetLastPosition(Node currentNode, Graphics2D g2, Integer minX, Integer minY, Position lastPosition, Integer scaling) {

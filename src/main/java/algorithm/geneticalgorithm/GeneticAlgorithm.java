@@ -26,11 +26,18 @@ public abstract class GeneticAlgorithm {
 
     protected int currentGeneration;
 
+    protected boolean printWhileGenerating;
+
     private GraphicOutput frame;
     private SelectionAlgorithm selectionAlgorithm;
 
     public GeneticAlgorithm startedAt(long startTime) {
         this.startTime = startTime;
+        return this;
+    }
+
+    public GeneticAlgorithm printsWhileGenerating(boolean printWhileGenerating) {
+        this.printWhileGenerating = printWhileGenerating;
         return this;
     }
 
@@ -64,7 +71,7 @@ public abstract class GeneticAlgorithm {
         return this;
     }
 
-    public GeneticAlgorithm usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm){
+    public GeneticAlgorithm usesSelectionAlgorithm(SelectionAlgorithm selectionAlgorithm) {
         this.selectionAlgorithm = selectionAlgorithm;
         return this;
     }
@@ -85,8 +92,10 @@ public abstract class GeneticAlgorithm {
         population.calculateHammingDistance(calculateHammingDistance);
         population.saveResults(currentGeneration);
 
-        initializeFrame();
-        paint(population);
+        if (printWhileGenerating) {
+            initializeFrame();
+            paint(population);
+        }
 
         return generateTillLimit(population);
     }
@@ -110,7 +119,9 @@ public abstract class GeneticAlgorithm {
         population.calculateHammingDistance(calculateHammingDistance);
         population.saveResults(currentGeneration);
 
-        paint(population);
+        if (printWhileGenerating) {
+            paint(population);
+        }
     }
 
     protected abstract void setupStart();
