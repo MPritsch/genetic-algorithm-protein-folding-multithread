@@ -76,11 +76,14 @@ public abstract class GeneticAlgorithm {
         return this;
     }
 
-    public Population generate() {
+    public Population generateStartPopulation() {
+        PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
+        return populationGenerator.generateStartPopulation();
+    }
+
+    public Population runAlgorithm(Population population) {
         setupStart();
 
-        PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
-        Population population = populationGenerator.generateStartPopulation();
         population.usesSelectionAlgorithm(selectionAlgorithm);
         population.setStartTime(startTime);
         population.setDocumentsStatistic(documentsStatistic);
@@ -127,4 +130,8 @@ public abstract class GeneticAlgorithm {
     protected abstract void setupStart();
 
     protected abstract Population generateTillLimit(Population population);
+
+    public int getCurrentGeneration() {
+        return currentGeneration;
+    }
 }
