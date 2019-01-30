@@ -56,15 +56,15 @@ public class Population {
         structures.add(structure);
     }
 
-    public void saveResults(int currentGeneration) {
+    public void saveResults(int totalGeneration) {
         Structure currentBestProtein = calculateStatisticAndGetCurrentBestProtein();
 
         checkForNewBestProtein(currentBestProtein);
 
-        statistic.setGeneration(currentGeneration);
+        statistic.setGeneration(totalGeneration);
         statistic.setBestProteinInGeneration(currentBestProtein);
 
-        saveAndPrintResults(currentGeneration, currentBestProtein);
+        saveAndPrintResults(totalGeneration, currentBestProtein);
     }
 
     private void checkForNewBestProtein(Structure currentBestProtein) {
@@ -100,16 +100,16 @@ public class Population {
         return currentBestProtein.orElse(null);
     }
 
-    private void saveAndPrintResults(int currentGeneration, Structure currentBestProtein) {
+    private void saveAndPrintResults(int totalGeneration, Structure currentBestProtein) {
         if (documentsStatistic) {
-            printStatusOfCurrentGeneration(currentGeneration, currentBestProtein);
+            printStatusOfCurrentGeneration(totalGeneration, currentBestProtein);
         }
 //        bestProtein.printStructure();
-        saveValuesForChart(currentGeneration, currentBestProtein);
+        saveValuesForChart(totalGeneration, currentBestProtein);
     }
 
-    public void printStatusOfCurrentGeneration(int currentGeneration, Structure currentBestProtein) {
-        System.out.println("Generation " + currentGeneration + ":");
+    public void printStatusOfCurrentGeneration(int totalGeneration, Structure currentBestProtein) {
+        System.out.println("Generation " + totalGeneration + ":");
         System.out.println("  Total Fitness: " + statistic.getTotalFitness());
         System.out.println("  Average Fitness " + statistic.getAverageFitness());
         System.out.println("  Average neighbor count: " + statistic.getAverageNeighborCounter());
@@ -126,12 +126,12 @@ public class Population {
         System.out.println("  Best in generation: Valid neighbor count: " + statistic.getBestProteinInGeneration().getValidNeighborCount());
     }
 
-    private void saveValuesForChart(int currentGeneration, Structure currentBestProtein) {
+    private void saveValuesForChart(int totalGeneration, Structure currentBestProtein) {
         //        lineChartDataset.addValue(totalAbsoluteFitness, "total absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(statistic.getAverageFitness(), "average absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(statistic.getBestProtein().getAbsoluteFitness(), "best overall absoluteFitness", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(statistic.getBestProteinInGeneration().getAbsoluteFitness(), "best absoluteFitness in generation", String.valueOf(currentGeneration));
-        lineChartDataset.addValue(statistic.getAverageHammingDistance(), "average hamming", String.valueOf(currentGeneration));
+        lineChartDataset.addValue(statistic.getAverageFitness(), "average absoluteFitness", String.valueOf(totalGeneration));
+        lineChartDataset.addValue(statistic.getBestProtein().getAbsoluteFitness(), "best overall absoluteFitness", String.valueOf(totalGeneration));
+        lineChartDataset.addValue(statistic.getBestProteinInGeneration().getAbsoluteFitness(), "best absoluteFitness in generation", String.valueOf(totalGeneration));
+        lineChartDataset.addValue(statistic.getAverageHammingDistance(), "average hamming", String.valueOf(totalGeneration));
     }
 
     public void select() {

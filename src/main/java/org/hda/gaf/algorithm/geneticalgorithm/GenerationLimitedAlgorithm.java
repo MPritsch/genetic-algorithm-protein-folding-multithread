@@ -5,7 +5,7 @@ import org.hda.gaf.algorithm.Population;
 /**
  * Created by marcus on 31.05.16.
  */
-public class GenerationLimitedAlgorithm extends GeneticAlgorithm{
+public class GenerationLimitedAlgorithm extends GeneticAlgorithm {
 
     private Integer generationAmount;
 
@@ -15,18 +15,14 @@ public class GenerationLimitedAlgorithm extends GeneticAlgorithm{
     }
 
     @Override
-    protected Population generateTillLimit(Population population){
-        while (currentGeneration < generationAmount - 1) {
+    protected Population generateTillLimit(Population population) {
+        while (currentGeneration < generationAmount) {
             currentGeneration++;
+            totalGeneration++;
 
             performAlgorithm(population);
         }
 
         return population;
-    }
-
-    @Override
-    protected void setupStart() {
-
     }
 }

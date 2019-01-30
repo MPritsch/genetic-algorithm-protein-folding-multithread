@@ -62,11 +62,12 @@ public class PopulationThread implements Runnable {
             }
         }
 
-        System.out.println(threadNumber + " Done. Sending/collecting best genoms.");
+        if(threadNumber == 0) {
+            System.out.println("Done generating. Sending and collecting best proteins.");
+        }
 
         collectBestPopulation(bestProteins, threadNumber, ownPopulation);
 
-        System.out.println(threadNumber + " Share statistics");
         ThreadStatisticsSharer.shareStatistics(ownPopulation);
     }
 

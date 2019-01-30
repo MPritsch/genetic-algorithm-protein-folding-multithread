@@ -24,6 +24,7 @@ public abstract class GeneticAlgorithm {
 
     protected boolean calculateHammingDistance;
 
+    protected int totalGeneration;
     protected int currentGeneration;
 
     protected boolean printWhileGenerating;
@@ -77,13 +78,13 @@ public abstract class GeneticAlgorithm {
     }
 
     public Population generateStartPopulation() {
+        this.totalGeneration = 0;
+
         PopulationGenerator populationGenerator = new PopulationGenerator(primarySequence.length(), populationAmount);
         return populationGenerator.generateStartPopulation();
     }
 
     public Population runAlgorithm(Population population) {
-        setupStart();
-
         population.usesSelectionAlgorithm(selectionAlgorithm);
         population.setStartTime(startTime);
         population.setDocumentsStatistic(documentsStatistic);
@@ -93,7 +94,7 @@ public abstract class GeneticAlgorithm {
         this.currentGeneration = 0;
 
         population.calculateHammingDistance(calculateHammingDistance);
-        population.saveResults(currentGeneration);
+        population.saveResults(totalGeneration);
 
         if (printWhileGenerating) {
             initializeFrame();
@@ -120,14 +121,12 @@ public abstract class GeneticAlgorithm {
         population.evaluate(primarySequence);
 
         population.calculateHammingDistance(calculateHammingDistance);
-        population.saveResults(currentGeneration);
+        population.saveResults(totalGeneration);
 
         if (printWhileGenerating) {
             paint(population);
         }
     }
-
-    protected abstract void setupStart();
 
     protected abstract Population generateTillLimit(Population population);
 

@@ -56,7 +56,7 @@ public class GeneticAlgorithmGenerator {
 
     private GeneticAlgorithm getDefaultAlgorithm(int threadNumber) {
         GeneticAlgorithm geneticAlgorithm;
-        geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT / THREAD_AMOUNT);
+        geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(GENERATION_AMOUNT / THREAD_EXCHANGE_TIMES);
         if (threadNumber == 0) {
             System.out.println("Executing default 'generation' limited algorithm with total " + GENERATION_AMOUNT + " per process.");
         }
@@ -86,7 +86,7 @@ public class GeneticAlgorithmGenerator {
             generationAmount = Integer.valueOf(commands.get(generationCommandIndex + 1));
         }
 
-        geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(generationAmount / THREAD_AMOUNT);
+        geneticAlgorithm = new GenerationLimitedAlgorithm().usesGenerationLimit(generationAmount / THREAD_EXCHANGE_TIMES);
         if (threadNumber == 0) {
             System.out.println("Executing 'generation' limited algorithm with total " + generationAmount + " per process.");
         }
