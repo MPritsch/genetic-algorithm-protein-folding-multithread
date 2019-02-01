@@ -29,7 +29,7 @@ public class ThreadAlgorithmExecutor {
 
         Map<Integer, Population> populationMap = new ConcurrentHashMap<>(THREAD_AMOUNT);
         Map<Integer, BlockingQueue<List<List<RelativeDirection>>>> queueMap = new HashMap<>(DefaultOptions.THREAD_AMOUNT);
-        BlockingQueue<List<RelativeDirection>> bestProteins = new ArrayBlockingQueue<>(THREAD_EXCHANGE_TIMES);
+        BlockingQueue<List<RelativeDirection>> bestProteins = new ArrayBlockingQueue<>(DefaultOptions.THREAD_AMOUNT);
 
         for (int i = 0; i < THREAD_AMOUNT; i++) {
             queueMap.put(i, new ArrayBlockingQueue<>(THREAD_EXCHANGE_TIMES));
