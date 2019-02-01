@@ -17,7 +17,7 @@ ga_alg() {
 runtests() {
     echo -e "\n\n\n##################### NEW TEST SUITE ##########################\n\n\n"
 
-    THREAD_COUNT_ARRAY=$1
+    THREAD_COUNT_ARRAY=($@)
 
     echo -e "Using $THREAD_COUNT_ARRAY threads"
 
@@ -38,4 +38,4 @@ echo -e "\n\n\n#--------###################------# MULTITHREADING #----------###
 
 THREAD_ARRAY=( 1 2 4 8 16 28 32 56 )
 
-runtests $THREAD_ARRAY
+runtests ${THREAD_ARRAY[@]}
